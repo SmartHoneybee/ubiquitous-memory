@@ -22,6 +22,7 @@ apk add libjpeg-turbo-utils
 apk add pngquant@edge
 apk add gifsicle
 apk add optipng
-# dev guide
+# compiling
+cd ~/go/src/github.com/mattermost/mattermost-server
 make package
 cp -rv ~/go/src/github.com/mattermost/mattermost-server/dist/* /build/
