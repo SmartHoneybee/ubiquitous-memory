@@ -9,7 +9,7 @@ index b738cd4..46f24bf 100644
 -	rm -rf dist
 -
 -	yarn run build
-+	yarn --no-progress --non-interactive --no-emoji --silent run build
++	yarn run build --no-progress --non-interactive --no-emoji --silent
  
  run: .yarninstall
  	@echo Running mattermost Webapp for development
