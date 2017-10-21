@@ -2,7 +2,7 @@
 set -ex
 echo '@edge http://nl.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories
 apk update
-apk add gcc g++ make wget go nodejs libjpeg-turbo-utils pngquant@edge gifsicle optipng yarn
+apk add git gcc g++ make wget go nodejs libjpeg-turbo-utils pngquant@edge gifsicle optipng yarn
 mkdir ~/go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
