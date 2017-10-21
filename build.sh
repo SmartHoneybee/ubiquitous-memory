@@ -2,8 +2,7 @@
 set -ex
 echo '@edge http://nl.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories
 apk update
-# dev guide
-apk add gcc g++ make wget go nodejs
+apk add gcc g++ make wget go nodejs libjpeg-turbo-utils pngquant@edge gifsicle optipng yarn
 mkdir ~/go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
@@ -19,14 +18,9 @@ wget "https://github.com/mattermost/mattermost-webapp/archive/v${V}.tar.gz"
 tar xf "v${V}.tar.gz"
 mv "mattermost-webapp-${V}" mattermost-webapp
 rm "v${V}.tar.gz"
-# hack
-apk add libjpeg-turbo-utils
-apk add pngquant@edge
-apk add gifsicle
-apk add optipng
-# compiling
+cd ~/go/src/github.com/mattermost/mattermost-webapp
+make build -i # ignore errors
 cd ~/go/src/github.com/mattermost/mattermost-server
 patch -p1 < /build/make.patch
-make build-linux
-make package
+make build-linux package
 cp -rv ~/go/src/github.com/mattermost/mattermost-server/dist/* /build/
