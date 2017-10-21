@@ -19,6 +19,7 @@ mv "mattermost-webapp-${V}" mattermost-webapp
 rm "v${V}.tar.gz"
 cd ~/go/src/github.com/mattermost/mattermost-webapp
 patch -p1 < /build/yarn.patch
+t() { printf "\n"; sleep 590; t;}; t &
 make build -i > /build/ubiquitous-memory.log 2>&1
 cd ~/go/src/github.com/mattermost/mattermost-server
 patch -p1 < /build/make.patch
