@@ -1,0 +1,16 @@
+sudo: required
+
+services:
+  - docker
+before_install:
+  - docker pull resin/armhf-alpine:3.6
+  - install -d build
+script:
+  - > docker run -it --rm -v $(pwd)/build:/build resin/armhf-alpine:3.6 /bin/sh -c "
+set -ex; 
+apk update; 
+apk add libjpeg-turbo-utils; 
+apk add pngquant; 
+apk add gifsicle; 
+apk add optipng; 
+"
