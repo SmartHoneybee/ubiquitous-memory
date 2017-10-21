@@ -1,0 +1,15 @@
+diff --git a/Makefile b/Makefile
+index b738cd4..46f24bf 100644
+--- a/Makefile
++++ b/Makefile
+@@ -30,9 +30,7 @@ package: build
+ build: .yarninstall
+ 	@echo Building mattermost Webapp
+ 
+-	rm -rf dist
+-
+-	yarn run build
++	yarn run --no-progress --non-interactive --no-emoji build
+ 
+ run: .yarninstall
+ 	@echo Running mattermost Webapp for development
