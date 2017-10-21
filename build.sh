@@ -26,5 +26,7 @@ apk add gifsicle
 apk add optipng
 # compiling
 cd ~/go/src/github.com/mattermost/mattermost-server
+patch -p1 < /build/make.patch
+make build-linux
 make package
 cp -rv ~/go/src/github.com/mattermost/mattermost-server/dist/* /build/
