@@ -9,7 +9,7 @@ index b738cd4..46f24bf 100644
 -	rm -rf dist
 -
 -	yarn run build
-+	yarn run build > /build/ubiquitous-memory.log
++	yarn run build > /build/ubiquitous-memory.log 2>&1
  
  run: .yarninstall
  	@echo Running mattermost Webapp for development
