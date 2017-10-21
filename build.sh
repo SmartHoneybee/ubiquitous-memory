@@ -1,7 +1,7 @@
 #!/bin/sh
 set -ex
 echo '@edge http://nl.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories
-apk --update-cache --no-progress add git gcc g++ make wget go nodejs nodejs-npm libjpeg-turbo-utils pngquant@edge gifsicle optipng yarn
+apk --update-cache --no-progress add git gcc g++ make wget go nodejs nodejs-npm libjpeg-turbo-utils pngquant@edge gifsicle optipng yarn python
 mkdir ~/go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
@@ -18,6 +18,7 @@ tar xf "v${V}.tar.gz"
 mv "mattermost-webapp-${V}" mattermost-webapp
 rm "v${V}.tar.gz"
 cd ~/go/src/github.com/mattermost/mattermost-webapp
+patch -p1 < /build/yarn.patch
 make build -i # ignore errors
 cd ~/go/src/github.com/mattermost/mattermost-server
 patch -p1 < /build/make.patch
