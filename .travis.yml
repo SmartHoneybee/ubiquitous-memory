@@ -9,3 +9,5 @@ before_install:
   - docker run --rm --privileged multiarch/qemu-user-static:register
 script:
   - docker run -it --rm -v $(pwd):/build resin/armhf-alpine:3.6 /build/build.sh
+after_failure:
+  - cat ubiquitous-memory.log
