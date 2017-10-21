@@ -7,4 +7,5 @@ before_install:
   - install -d build
 script:
   - chmod +x build.sh
+  - docker run --rm --privileged multiarch/qemu-user-static:register
   - docker run -it --rm -v $(pwd):/build resin/armhf-alpine:3.6 /build/build.sh
