@@ -1,5 +1,5 @@
 diff --git a/build/release.mk b/build/release.mk
-index 5eaee80..0ffa7c3 100644
+index 5eaee80..e0e13bf 100644
 --- a/build/release.mk
 +++ b/build/release.mk
 @@ -3,7 +3,7 @@ dist: | check-style test package
@@ -19,7 +19,7 @@ index 5eaee80..0ffa7c3 100644
  	cp -RL fonts $(DIST_PATH)
  	cp -RL templates $(DIST_PATH)
  	cp -RL i18n $(DIST_PATH)
-@@ -61,30 +62,6 @@ endif
+@@ -61,38 +62,14 @@ endif
  
  	@# ----- PLATFORM SPECIFIC -----
  
@@ -49,4 +49,15 @@ index 5eaee80..0ffa7c3 100644
 -
  	@# Make linux package
  	@# Copy binary
- ifeq ($(BUILDER_GOOS_GOARCH),"linux_amd64")
+-ifeq ($(BUILDER_GOOS_GOARCH),"linux_amd64")
++ifeq ($(BUILDER_GOOS_GOARCH),"linux_arm")
+ 	cp $(GOPATH)/bin/platform $(DIST_PATH)/bin # from native bin dir, not cross-compiled
+ else
+-	cp $(GOPATH)/bin/linux_amd64/platform $(DIST_PATH)/bin # from cross-compiled bin dir
++	cp $(GOPATH)/bin/linux_arm/platform $(DIST_PATH)/bin # from cross-compiled bin dir
+ endif
+ 	@# Package
+-	tar -C dist -czf $(DIST_PATH)-$(BUILD_TYPE_NAME)-linux-amd64.tar.gz mattermost
++	tar -C dist -czf $(DIST_PATH)-$(BUILD_TYPE_NAME)-linux-arm.tar.gz mattermost
+ 	@# Don't clean up native package so dev machines will have an unzipped package available
+ 	@#rm -f $(DIST_PATH)/bin/platform
