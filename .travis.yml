@@ -6,4 +6,5 @@ before_install:
   - docker pull resin/armhf-alpine:3.6
   - install -d build
 script:
-  - docker run -it --rm -v $(pwd):/build resin/armhf-alpine:3.6 /bin/sh -c "cd /build; sh build.sh;"
+  - chmod +x build.sh
+  - docker run -it --rm -v $(pwd):/build resin/armhf-alpine:3.6 /build/build.sh
