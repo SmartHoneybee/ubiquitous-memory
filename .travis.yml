@@ -22,7 +22,7 @@ env:
     - V=4.3.1
 before_install:
   - node --version
-  - yarn version
+  - yarn versions
   - go version
   - mkdir ~/go
   - ulimit -n 8096
