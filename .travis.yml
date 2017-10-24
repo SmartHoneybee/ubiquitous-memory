@@ -24,15 +24,14 @@ env:
     - V=4.3.0
     - V=4.3.1
 before_install:
-  - mkdir -p $GOPATH $GOROOT
+  - install -d $GOPATH $GOROOT
   - wget https://storage.googleapis.com/golang/go$GOV.linux-amd64.tar.gz
   - tar -C $HOME -xzf go$GOV.linux-amd64.tar.gz
   - node --version
   - yarn versions
   - go version
-  - mkdir ~/go
   - ulimit -n 8096
-  - mkdir -p ~/go/src/github.com/mattermost
+  - install -d ~/go/src/github.com/mattermost
   - cd ~/go/src/github.com/mattermost
   - wget "https://github.com/mattermost/mattermost-server/archive/v${V}.tar.gz"
   - tar xf "v${V}.tar.gz"
