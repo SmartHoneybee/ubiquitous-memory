@@ -16,7 +16,7 @@ addons:
 env:
   global:
     - GOPATH=$HOME/go
-    - PATH=$PATH:/usr/lib/go-1.9/bin:$GOPATH/bin
+    - PATH=/usr/lib/go-1.9/bin:$PATH:$GOPATH/bin
   matrix:
     - V=4.3.0
     - V=4.3.1
