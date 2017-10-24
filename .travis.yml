@@ -15,7 +15,7 @@ addons:
       - build-essential
 env:
   - GOPATH=$HOME/go
-  - export PATH=$PATH:$GOPATH/bin
+  - export PATH=$PATH:/usr/lib/go-1.9/bin:$GOPATH/bin
   - V=4.3.0
 before_install:
   - mkdir ~/go
