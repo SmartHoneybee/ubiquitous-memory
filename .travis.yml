@@ -7,21 +7,26 @@ addons:
         key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
       - sourceline: 'deb https://deb.nodesource.com/node_8.x trusty main'
         key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
-      - sourceline: 'ppa:gophers/archive'
+#      - sourceline: 'ppa:gophers/archive'
     packages:
       - nodejs
       - yarn
-      - golang-1.9-go
+#      - golang-1.9-go
       - build-essential
 env:
   global:
+    - GOV=1.9
     - GOPATH=$HOME/go
-    - GOROOT=/usr/lib/go-1.9
+#    - GOROOT=/usr/lib/go-1.9
+    - GOROOT=$HOME/go-$GOV
     - PATH=$GOROOT/bin:$PATH:$GOPATH/bin
   matrix:
     - V=4.3.0
     - V=4.3.1
 before_install:
+  - mkdir -p $GOPATH $GOROOT
+  - wget https://storage.googleapis.com/golang/go$GOV.linux-amd64.tar.gz
+  - tar -C $HOME -xzf go$GOV.linux-amd64.tar.gz
   - node --version
   - yarn versions
   - go version
