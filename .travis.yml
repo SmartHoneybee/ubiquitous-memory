@@ -14,9 +14,7 @@ addons:
       - golang-1.9-go
       - build-essential
 env:
-  GOPATH=$HOME/go
-  PATH=$PATH:/usr/lib/go-1.9/bin:$GOPATH/bin
-  V=4.3.0
+  - GOPATH=$HOME/go PATH=$PATH:/usr/lib/go-1.9/bin:$GOPATH/bin V=4.3.0
 before_install:
   - mkdir ~/go
   - ulimit -n 8096
