@@ -1,0 +1,36 @@
+language: c
+dist: trusty
+addons:
+  apt:
+    sources:
+      - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
+        key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
+      - sourceline: 'deb https://deb.nodesource.com/node_8.x trusty main'
+        key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
+      - sourceline: 'ppa:gophers/archive'
+    packages:
+      - nodejs
+      - yarn
+      - golang-1.9-go
+      - build-essential
+env:
+  - GOPATH=$HOME/go
+  - export PATH=$PATH:$GOPATH/bin
+  - V=4.3.0
+before_install:
+  - mkdir ~/go
+  - ulimit -n 8096
+  - mkdir -p ~/go/src/github.com/mattermost
+  - cd ~/go/src/github.com/mattermost
+  - wget "https://github.com/mattermost/mattermost-server/archive/v${V}.tar.gz"
+  - tar xf "v${V}.tar.gz"
+  - mv "mattermost-server-${V}" mattermost-server
+  - rm "v${V}.tar.gz"
+  - wget "https://github.com/mattermost/mattermost-webapp/archive/v${V}.tar.gz"
+  - tar xf "v${V}.tar.gz"
+  - mv "mattermost-webapp-${V}" mattermost-webapp
+  - rm "v${V}.tar.gz"
+  - cd ~/go/src/github.com/mattermost/mattermost-server
+  - patch -p1 < /build/make.patch
+script:
+  - make build-linux package
