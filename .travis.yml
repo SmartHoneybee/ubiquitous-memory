@@ -44,7 +44,6 @@ script:
   - patch -p1 < $TRAVIS_BUILD_DIR/make.patch
   - go get -d ./...
   - make build-linux package
-after_script:
   - mv -v ~/go/src/github.com/mattermost/mattermost-server/dist/mattermost-*-linux-arm.tar.gz $TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz
 deploy:
   provider: releases
