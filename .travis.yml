@@ -40,12 +40,14 @@ before_install:
   - rm "v${V}.tar.gz"
 script:
   - cd ~/go/src/github.com/mattermost/mattermost-webapp
-  - make build 2>&1 | tee /tmp/webapp.log | tr -d "[:alpha:]" | tr -c "[:alpha:]" "."
+  - make build 2>&1 | tee /tmp/webapp.log | tr -cd '[:space:]' | tr '[:space:]' '.'
   - cd ~/go/src/github.com/mattermost/mattermost-server
   - patch -p1 < $TRAVIS_BUILD_DIR/make.patch
   - go get -d ./... || true
   - go list -f '{{ join .Deps "\n" }}' | xargs go get -d || true
   - make build-linux package
+after_failure:
+  - cat /tmp/webapp.log
 deploy:
   provider: releases
   api_key: "${GITHUB_OAUTH_TOKEN}"
