@@ -40,7 +40,7 @@ before_install:
   - rm "v${V}.tar.gz"
 script:
   - cd ~/go/src/github.com/mattermost/mattermost-webapp
-  - make build > /tmp/webapp.log 2>&1; t() { printf "\n"; sleep 590; t;}; t &
+  - make build 2>&1 | tee /tmp/webapp.log | tr -d "[:alpha:]" | tr -c "[:alpha:]" "."
   - cd ~/go/src/github.com/mattermost/mattermost-server
   - patch -p1 < $TRAVIS_BUILD_DIR/make.patch
   - go get -d ./... || true
