@@ -7,17 +7,14 @@ addons:
         key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
       - sourceline: 'deb https://deb.nodesource.com/node_8.x trusty main'
         key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
-#      - sourceline: 'ppa:gophers/archive'
     packages:
       - nodejs
       - yarn
-#      - golang-1.9-go
       - build-essential
 env:
   global:
     - GOV=1.9
-    - GOPATH=$HOME/go/nan
-#    - GOROOT=/usr/lib/go-1.9
+    - GOPATH=$HOME/nan/go
     - GOROOT=$HOME/$GOV/go
     - PATH=$GOROOT/bin:$PATH:$GOPATH/bin
   matrix:
@@ -43,5 +40,6 @@ before_install:
   - rm "v${V}.tar.gz"
   - cd ~/go/src/github.com/mattermost/mattermost-server
   - patch -p1 < $TRAVIS_BUILD_DIR/make.patch
+  - go get ./...
 script:
   - make build-linux package
