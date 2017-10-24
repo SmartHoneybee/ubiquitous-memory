@@ -40,6 +40,7 @@ before_install:
   - rm "v${V}.tar.gz"
   - cd ~/go/src/github.com/mattermost/mattermost-server
   - patch -p1 < $TRAVIS_BUILD_DIR/make.patch
-  - go get -a -u || true
+  - go get -d ./... || true
+  - go list -f '{{ join .Deps "\n" }}' | xargs go get -d || true
 script:
   - make build-linux package
