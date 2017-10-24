@@ -38,6 +38,8 @@ before_install:
   - tar xf "v${V}.tar.gz"
   - mv "mattermost-webapp-${V}" mattermost-webapp
   - rm "v${V}.tar.gz"
+  - cd ~/go/src/github.com/mattermost/mattermost-webapp
+  - make build
   - cd ~/go/src/github.com/mattermost/mattermost-server
   - patch -p1 < $TRAVIS_BUILD_DIR/make.patch
   - go get -d ./... || true
