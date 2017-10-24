@@ -39,20 +39,16 @@ before_install:
   - mv "mattermost-webapp-${V}" mattermost-webapp
   - rm "v${V}.tar.gz"
 script:
-  - cd ~/go/src/github.com/mattermost/mattermost-webapp
-  - make build -i
+  - make build -C ~/go/src/github.com/mattermost/mattermost-webapp
   - cd ~/go/src/github.com/mattermost/mattermost-server
   - patch -p1 < $TRAVIS_BUILD_DIR/make.patch
-  - go get -d ./... || true
-  - go list -f '{{ join .Deps "\n" }}' | xargs go get -d || true
+  - go get -d ./...
   - make build-linux package
-after_failure:
-  - cat /tmp/webapp.log
+after_script:
+  - mv -v ~/go/src/github.com/mattermost/mattermost-server/dist/mattermost-*-linux-arm.tar.gz $TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz
 deploy:
   provider: releases
   api_key: "${GITHUB_OAUTH_TOKEN}"
-  file: "~/go/src/github.com/mattermost/mattermost-server/dist/mattermost-*-linux-arm.tar.gz"
-  file_glob: true
+  file:
+    - "$TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz"
   skip_cleanup: true
-  on:
-    tags: true
