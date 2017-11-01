@@ -45,9 +45,11 @@ script:
   - go get -d ./...
   - make build-linux package
   - mv -v ~/go/src/github.com/mattermost/mattermost-server/dist/mattermost-*-linux-arm.tar.gz $TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz
+  - sha512sum $TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz | tee $TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz.sha512sum
 deploy:
   provider: releases
   api_key: "${GITHUB_OAUTH_TOKEN}"
   file:
     - "$TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz"
+    - "$TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz.sha512sum"
   skip_cleanup: true
