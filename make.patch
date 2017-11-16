@@ -7,7 +7,7 @@ index 5eaee80..e0e13bf 100644
  build-linux:
  	@echo Build Linux amd64
 -	env GOOS=linux GOARCH=amd64 $(GO) install $(GOFLAGS) $(GO_LINKER_FLAGS) ./cmd/platform
-+	env GOOS=linux GOARCH=arm $(GO) install $(GOFLAGS) $(GO_LINKER_FLAGS) ./cmd/platform
++	env GOOS=linux GOARCH=arm GOARM=7 $(GO) install $(GOFLAGS) $(GO_LINKER_FLAGS) ./cmd/platform
  
  build-osx: 
  	@echo Build OSX amd64
