@@ -42,6 +42,7 @@ script:
   - cd ~/go/src/github.com/mattermost/mattermost-server
   - patch -p1 < $TRAVIS_BUILD_DIR/make.patch
   - go get -d ./...
+  - make test
   - make build-linux package BUILD_NUMBER="dev-arm-tag${V}"
   - mv -v ~/go/src/github.com/mattermost/mattermost-server/dist/mattermost-*-linux-arm.tar.gz $TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz
   - sha512sum $TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz | tee $TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz.sha512sum
