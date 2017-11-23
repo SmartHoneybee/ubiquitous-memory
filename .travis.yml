@@ -14,7 +14,7 @@ addons:
 env:
   global:
     - GOV=1.9.2
-    - GOSHA="de874549d9a8d8d8062be05808509c09a88a248e77ec14eb77453530829ac02b  go${GOV}.linux-amd64.tar.gz\n"
+    - GOSHA="de874549d9a8d8d8062be05808509c09a88a248e77ec14eb77453530829ac02b  go${GOV}.linux-amd64.tar.gz"
     - GOPATH=$HOME/go
     - GOROOT=$HOME/$GOV/go
     - PATH=$GOROOT/bin:$PATH:$GOPATH/bin
