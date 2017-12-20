@@ -31,8 +31,8 @@ before_install:
   - yarn versions
   - go version
   - ulimit -n 8096
-  - install -d ~/go/src/github.com/mattermost
-  - cd ~/go/src/github.com/mattermost
+  - install -d "${HOME}/go/src/github.com/mattermost"
+  - cd "${HOME}/go/src/github.com/mattermost"
   - wget "https://github.com/mattermost/mattermost-server/archive/v${V}.tar.gz"
   - tar xf "v${V}.tar.gz"
   - mv "mattermost-server-${V}" mattermost-server
@@ -42,12 +42,12 @@ before_install:
   - mv "mattermost-webapp-${V}" mattermost-webapp
   - rm "v${V}.tar.gz"
 script:
-  - make build -C ~/go/src/github.com/mattermost/mattermost-webapp
-  - cd ~/go/src/github.com/mattermost/mattermost-server
+  - make build -C "${HOME}/go/src/github.com/mattermost/mattermost-webapp"
+  - cd "${HOME}/go/src/github.com/mattermost/mattermost-server"
   - patch -p1 < "${TRAVIS_BUILD_DIR}/make.patch"
   - go get -d ./...
   - make config-reset build-linux package-linux GO="GOARCH=arm $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
-  - mv ~/go/src/github.com/mattermost/mattermost-server/dist/mattermost-team-linux-arm.tar.gz "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
+  - mv dist/mattermost-team-linux-arm.tar.gz "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
   - sha512sum "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz" | tee "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
 deploy:
   provider: releases
