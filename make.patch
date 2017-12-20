@@ -2,11 +2,19 @@ diff --git a/build/release.mk b/build/release.mk
 index 5eaee80..e0e13bf 100644
 --- a/build/release.mk
 +++ b/build/release.mk
-@@ -85,14 +85,15 @@ endif
+@@ -59,6 +59,7 @@ endif
+ 	cp NOTICE.txt $(DIST_PATH)
+ 	cp README.md $(DIST_PATH)
+ 
++_:
+ 	@# ----- PLATFORM SPECIFIC -----
+ 
+ 	@# Make osx package
+@@ -85,14 +86,15 @@ endif
  	@# Cleanup
  	rm -f $(DIST_PATH)/bin/platform.exe
  
-+package:
++package-linux: package
  	@# Make linux package
  	@# Copy binary
  ifeq ($(BUILDER_GOOS_GOARCH),"linux_amd64")
