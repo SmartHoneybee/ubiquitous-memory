@@ -45,7 +45,7 @@ script:
   - cd ~/go/src/github.com/mattermost/mattermost-server
   - patch -p1 < "${TRAVIS_BUILD_DIR}/make.patch"
   - go get -d ./...
-  - make config-reset build-linux package GO="GOARCH=arm GOARM=7 $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
+  - make config-reset build-linux package-linux GO="GOARCH=arm GOARM=7 $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
   - mv ~/go/src/github.com/mattermost/mattermost-server/dist/mattermost-team-linux-arm.tar.gz "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
   - sha512sum "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz" | tee "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
 deploy:
