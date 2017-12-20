@@ -2,15 +2,6 @@ diff --git a/build/release.mk b/build/release.mk
 index 5eaee80..e0e13bf 100644
 --- a/build/release.mk
 +++ b/build/release.mk
-@@ -3,7 +3,7 @@ dist: | check-style test package
- 
- build-linux:
- 	@echo Build Linux amd64
--	env GOOS=linux GOARCH=amd64 $(GO) install $(GOFLAGS) $(GO_LINKER_FLAGS) ./cmd/platform
-+	env GOOS=linux GOARCH=arm GOARM=7 $(GO) install $(GOFLAGS) $(GO_LINKER_FLAGS) ./cmd/platform
- 
- build-osx: 
- 	@echo Build OSX amd64
 @@ -32,6 +32,7 @@ package:
  
  	@# Resource directories
