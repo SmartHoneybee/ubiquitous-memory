@@ -2,14 +2,6 @@ diff --git a/build/release.mk b/build/release.mk
 index 5eaee80..e0e13bf 100644
 --- a/build/release.mk
 +++ b/build/release.mk
-@@ -32,6 +32,7 @@ package:
- 
- 	@# Resource directories
- 	cp -RL config $(DIST_PATH)
-+	mv $(DIST_PATH)/config/default.json $(DIST_PATH)/config/config.json
- 	cp -RL fonts $(DIST_PATH)
- 	cp -RL templates $(DIST_PATH)
- 	cp -RL i18n $(DIST_PATH)
 @@ -85,14 +85,15 @@ endif
  	@# Cleanup
  	rm -f $(DIST_PATH)/bin/platform.exe
