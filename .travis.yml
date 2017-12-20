@@ -15,17 +15,17 @@ env:
   global:
     - GOV=1.9.2
     - GOSHA="de874549d9a8d8d8062be05808509c09a88a248e77ec14eb77453530829ac02b  go${GOV}.linux-amd64.tar.gz"
-    - GOPATH=$HOME/go
-    - GOROOT=$HOME/$GOV/go
-    - PATH=$GOROOT/bin:$PATH:$GOPATH/bin
+    - GOPATH="${HOME}/go"
+    - GOROOT="${HOME}/${GOV}/go"
+    - PATH="${GOROOT}/bin:${PATH}:${GOPATH}/bin"
   matrix:
     - V=4.5.0
 before_install:
-  - install -d $GOPATH $GOROOT
-  - wget https://storage.googleapis.com/golang/go$GOV.linux-amd64.tar.gz
+  - install -d "${GOPATH}" "${GOROOT}"
+  - wget "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
   - echo "${GOSHA}" > .gosha
   - sha256sum --check .gosha
-  - tar -C $HOME/$GOV -xzf go$GOV.linux-amd64.tar.gz
+  - tar -C "${HOME}/${GOV}" -xzf "go${GOV}.linux-amd64.tar.gz"
   - node --version
   - yarn versions
   - go version
@@ -43,15 +43,15 @@ before_install:
 script:
   - make build -C ~/go/src/github.com/mattermost/mattermost-webapp
   - cd ~/go/src/github.com/mattermost/mattermost-server
-  - patch -p1 < $TRAVIS_BUILD_DIR/make.patch
+  - patch -p1 < "${TRAVIS_BUILD_DIR}/make.patch"
   - go get -d ./...
   - make config-reset build-linux package GO="GOARCH=arm GOARM=7 $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
-  - mv -v ~/go/src/github.com/mattermost/mattermost-server/dist/mattermost-*-linux-arm.tar.gz $TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz
-  - sha512sum $TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz | tee $TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz.sha512sum
+  - mv ~/go/src/github.com/mattermost/mattermost-server/dist/mattermost-team-linux-arm.tar.gz "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
+  - sha512sum "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz" | tee "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
 deploy:
   provider: releases
   api_key: "${GITHUB_OAUTH_TOKEN}"
   file:
-    - "$TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz"
-    - "$TRAVIS_BUILD_DIR/mattermost-$V-arm.tar.gz.sha512sum"
+    - "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
+    - "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
   skip_cleanup: true
