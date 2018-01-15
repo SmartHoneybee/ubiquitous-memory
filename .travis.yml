@@ -34,11 +34,10 @@ before_install:
   - tar -C "${SRCROOT}/mattermost-webapp" --strip-components=1 -xf mattermost-webapp.tar.gz
 script:
   - make build -C "${SRCROOT}/mattermost-webapp"
-  - cd "${SRCROOT}/mattermost-server"
-  - patch -p1 < "${TRAVIS_BUILD_DIR}/make.patch"
-  - go get -d ./...
-  - make config-reset build-linux package-linux GO="GOARCH=arm $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
-  - mv dist/mattermost-team-linux-arm.tar.gz "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
+  - patch -d "${SRCROOT}/mattermost-server" -p1 < "${TRAVIS_BUILD_DIR}/make.patch"
+  - go get -d "${SRCROOT}/mattermost-server/..."
+  - make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" GO="GOARCH=arm $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
+  - mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-arm.tar.gz" "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
   - sha512sum "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz" | tee "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
 deploy:
   provider: releases
