@@ -25,7 +25,7 @@ env:
 before_install:
   - install -d "${GOPATH}" "${GOROOT}" "${SRCROOT}/mattermost-{server,webapp}"
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
-  - sha256sum --check --text <<< "${GOSHA}"
+  - sha256sum --check <<< "${GOSHA}"
   - tar -C "${HOME}/${GOV}" -xzf "go${GOV}.linux-amd64.tar.gz"
   - ulimit -n 8096
   - wget -q "https://github.com/mattermost/mattermost-server/archive/v${V}.tar.gz" -O mattermost-server.tar.gz
