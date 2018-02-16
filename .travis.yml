@@ -5,7 +5,7 @@ addons:
     sources:
       - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
         key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
-      - sourceline: 'deb https://deb.nodesource.com/node_8.x trusty main'
+      - sourceline: 'deb https://deb.nodesource.com/node_9.x trusty main'
         key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
     packages:
       - nodejs
