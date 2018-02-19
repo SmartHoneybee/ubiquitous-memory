@@ -5,7 +5,7 @@ addons:
     sources:
       - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
         key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
-      - sourceline: 'deb https://deb.nodesource.com/node_8.x trusty main'
+      - sourceline: 'deb https://deb.nodesource.com/node_9.x trusty main'
         key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
     packages:
       - nodejs
@@ -13,15 +13,15 @@ addons:
       - build-essential
 env:
   global:
-    - GOV=1.9.2
-    - GOSHA="de874549d9a8d8d8062be05808509c09a88a248e77ec14eb77453530829ac02b  go${GOV}.linux-amd64.tar.gz"
+    - GOV=1.9.4
+    - GOSHA="15b0937615809f87321a457bb1265f946f9f6e736c563d6c5e0bd2c22e44f779  go${GOV}.linux-amd64.tar.gz"
     - GOPATH="${HOME}/go"
     - GOROOT="${HOME}/${GOV}/go"
     - PATH="${GOROOT}/bin:${PATH}:${GOPATH}/bin"
     - SRCROOT="${GOPATH}/src/github.com/mattermost"
     - GOARM=7
   matrix:
-    - V=4.7.0
+    - V=4.7.1
 before_install:
   - install -d "${GOPATH}" "${GOROOT}" "${SRCROOT}/mattermost-"{server,webapp}
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
@@ -33,6 +33,7 @@ before_install:
   - wget -q "https://github.com/mattermost/mattermost-webapp/archive/v${V}.tar.gz" -O mattermost-webapp.tar.gz
   - tar -C "${SRCROOT}/mattermost-webapp" --strip-components=1 -xf mattermost-webapp.tar.gz
 script:
+  - patch -d "${SRCROOT}/mattermost-webapp" -p1 < "${TRAVIS_BUILD_DIR}/webpack.patch"
   - make build -C "${SRCROOT}/mattermost-webapp"
   - patch -d "${SRCROOT}/mattermost-server" -p1 < "${TRAVIS_BUILD_DIR}/make.patch"
   - go get -d github.com/mattermost/mattermost-server/...
