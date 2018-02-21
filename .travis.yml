@@ -10,7 +10,7 @@ env:
     - PATH="${GOROOT}/bin:${PATH}:${GOPATH}/bin"
     - SRCROOT="${GOPATH}/src/github.com/mattermost"
   matrix:
-    - V=4.7.1
+    - V=4.7.2-rc1
 addons:
   apt:
     sources:
