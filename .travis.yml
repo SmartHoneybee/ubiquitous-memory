@@ -35,6 +35,7 @@ before_install:
 script:
   - ln -s "${TRAVIS_BUILD_DIR}/.git" "${SRCROOT}"
   - make build -C "${SRCROOT}/mattermost-webapp"
+  - patch -d "${SRCROOT}/mattermost-server" -p1 < "${TRAVIS_BUILD_DIR}/make.patch"
   - go get -d github.com/mattermost/mattermost-server/...
   - make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" GO="GOARCH=arm $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
   - mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-arm.tar.gz" "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
