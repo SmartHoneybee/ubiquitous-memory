@@ -2,7 +2,7 @@ diff --git a/build/release.mk b/build/release.mk
 index 5eaee80..e0e13bf 100644
 --- a/build/release.mk
 +++ b/build/release.mk
-@@ -83,10 +83,10 @@ endif
+@@ -83,13 +83,13 @@ endif
  
  package-linux: package-common
  	@# Copy binary
@@ -14,4 +14,7 @@ index 5eaee80..e0e13bf 100644
 +	cp $(GOPATH)/bin/linux_arm/platform $(DIST_PATH)/bin # from cross-compiled bin dir
  endif
  	@# Package
- 	tar -C dist -czf $(DIST_PATH)-$(BUILD_TYPE_NAME)-linux-amd64.tar.gz mattermost
+-	tar -C dist -czf $(DIST_PATH)-$(BUILD_TYPE_NAME)-linux-amd64.tar.gz mattermost
++	tar -C dist -czf $(DIST_PATH)-$(BUILD_TYPE_NAME)-linux-arm.tar.gz mattermost
+ 	@# Don't clean up native package so dev machines will have an unzipped package available
+ 	@#rm -f $(DIST_PATH)/bin/platform
