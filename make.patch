@@ -2,12 +2,8 @@ diff --git a/build/release.mk b/build/release.mk
 index 5eaee80..e0e13bf 100644
 --- a/build/release.mk
 +++ b/build/release.mk
-@@ -83,13 +83,13 @@ endif
- 
- package-linux: package-common
- 	@# Copy binary
--ifeq ($(BUILDER_GOOS_GOARCH),"linux_amd64")
-+ifeq ($(BUILDER_GOOS_GOARCH),"linux_arm")
+@@ -86,10 +86,10 @@ package-linux: package-common
+ ifeq ($(BUILDER_GOOS_GOARCH),"linux_amd64")
  	cp $(GOPATH)/bin/platform $(DIST_PATH)/bin # from native bin dir, not cross-compiled
  else
 -	cp $(GOPATH)/bin/linux_amd64/platform $(DIST_PATH)/bin # from cross-compiled bin dir
