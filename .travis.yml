@@ -35,7 +35,7 @@ before_install:
 script:
   - make build -C "${SRCROOT}/mattermost-webapp"
   - install -d "${GOROOT}/bin/linux_amd64"
-  - ln -s "${GOROOT}/bin/platform" "${GOROOT}/bin/linux_amd64/platform"
+  - ln -s "${GOROOT}/bin/linux_arm/platform" "${GOROOT}/bin/linux_amd64/platform"
   - go get -d github.com/mattermost/mattermost-server/...
   - make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" GO="GOARCH=arm $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
   - mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
