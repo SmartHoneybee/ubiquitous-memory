@@ -1,16 +1,13 @@
-diff --git a/build/release.mk b/build/release.mk
+diff --git a/Makefile b/Makefile
 index 5eaee80..e0e13bf 100644
---- a/build/release.mk
-+++ b/build/release.mk
-@@ -86,10 +86,10 @@ package-linux: package-common
- ifeq ($(BUILDER_GOOS_GOARCH),"linux_amd64")
- 	cp $(GOPATH)/bin/platform $(DIST_PATH)/bin # from native bin dir, not cross-compiled
- else
--	cp $(GOPATH)/bin/linux_amd64/platform $(DIST_PATH)/bin # from cross-compiled bin dir
-+	cp $(GOPATH)/bin/linux_arm/platform $(DIST_PATH)/bin # from cross-compiled bin dir
- endif
- 	@# Package
--	tar -C dist -czf $(DIST_PATH)-$(BUILD_TYPE_NAME)-linux-amd64.tar.gz mattermost
-+	tar -C dist -czf $(DIST_PATH)-$(BUILD_TYPE_NAME)-linux-arm.tar.gz mattermost
- 	@# Don't clean up native package so dev machines will have an unzipped package available
- 	@#rm -f $(DIST_PATH)/bin/platform
+--- a/Makefile
++++ b/Makefile
+@@ -54,7 +54,7 @@ GO_LINKER_FLAGS ?= -ldflags \
+ 				    -X github.com/mattermost/mattermost-server/model.BuildEnterpriseReady=$(BUILD_ENTERPRISE_READY)"
+ 
+ # GOOS/GOARCH of the build host, used to determine whether we're cross-compiling or not
+-BUILDER_GOOS_GOARCH="$(shell $(GO) env GOOS)_$(shell $(GO) env GOARCH)"
++BUILDER_GOOS_GOARCH="$(shell $(GO) env GOHOSTOS)_$(shell $(GO) env GOHOSTARCH)"
+ 
+ PLATFORM_FILES="./main.go"
+ 
