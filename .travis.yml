@@ -5,7 +5,7 @@ addons:
     sources:
       - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
         key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
-      - sourceline: 'deb https://deb.nodesource.com/node_9.x trusty main'
+      - sourceline: 'deb https://deb.nodesource.com/node_10.x trusty main'
         key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
     packages:
       - nodejs
@@ -13,8 +13,8 @@ addons:
       - build-essential
 env:
   global:
-    - GOV=1.10
-    - GOSHA="b5a64335f1490277b585832d1f6c7f8c6c11206cba5cd3f771dcb87b98ad1a33  go${GOV}.linux-amd64.tar.gz"
+    - GOV=1.10.2
+    - GOSHA="4b677d698c65370afa33757b6954ade60347aaca310ea92a63ed717d7cb0c2ff  go${GOV}.linux-amd64.tar.gz"
     - GOPATH="${HOME}/go"
     - GOROOT="${HOME}/${GOV}/go"
     - PATH="${GOROOT}/bin:${PATH}:${GOPATH}/bin"
