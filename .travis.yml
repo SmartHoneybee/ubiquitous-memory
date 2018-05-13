@@ -21,7 +21,7 @@ env:
     - SRCROOT="${GOPATH}/src/github.com/mattermost"
     - GOARM=7
   matrix:
-    - V=4.10.0-rc2
+    - V=4.10.0-rc3
 before_install:
   - install -d "${GOPATH}" "${GOROOT}" "${SRCROOT}/mattermost-"{server,webapp}
   # download & extract golang
