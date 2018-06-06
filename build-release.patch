@@ -1,0 +1,33 @@
+From 556e16211ed1b4c146ca2a094688618458182ae7 Mon Sep 17 00:00:00 2001
+From: Your Name <you@example.com>
+Date: Wed, 6 Jun 2018 12:34:56 +0100
+Subject: [PATCH] Split make goal
+
+---
+ build/release.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/build/release.mk b/build/release.mk
+index 238343e..1b7859f 100644
+--- a/build/release.mk
++++ b/build/release.mk
+@@ -72,7 +72,7 @@ endif
+ 	cp README.md $(DIST_PATH)
+ 
+ 	@# ----- PLATFORM SPECIFIC -----
+-
++_:
+ 	@# Make osx package
+ 	@# Copy binary
+ ifeq ($(BUILDER_GOOS_GOARCH),"darwin_amd64")
+@@ -102,7 +102,7 @@ endif
+ 	@# Cleanup
+ 	rm -f $(DIST_PATH)/bin/mattermost.exe
+ 	rm -f $(DIST_PATH)/bin/platform.exe
+-
++package-linux: package
+ 	@# Make linux package
+ 	@# Copy binary
+ ifeq ($(BUILDER_GOOS_GOARCH),"linux_amd64")
+-- 
+2.11.0
