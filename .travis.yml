@@ -40,14 +40,13 @@ script:
   - make build -C "${SRCROOT}/mattermost-webapp"
   # workaround (instead of patch): platform binary is in GOOS_GOARCH, Makefile expects it in linux_amd64
   - install -d "${GOPATH}/bin/linux_amd64"
-  - ln -s "${GOPATH}/bin/linux_arm/platform" "${GOPATH}/bin/linux_amd64/platform"
+  - ln -s "${GOPATH}/bin/linux_arm/{platform,mattermost}" "${GOPATH}/bin/linux_amd64"
   # install dependencies
   - go get -d github.com/mattermost/mattermost-server/...
   # adapt and revert reverted commit, https://github.com/mattermost/mattermost-server/pull/8537
   - patch -d "${SRCROOT}/mattermost-server" -p1 < "${TRAVIS_BUILD_DIR}/build-release.patch"
   # workaround (instead of patch): overwrite GO variable to enforce desired GOARCH
   - make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" GO="GOARCH=arm $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
-  - ls -R "${GOPATH}/bin/"
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
   - mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
   - sha512sum "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz" | tee "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
