@@ -29,7 +29,7 @@ before_install:
   - sha256sum --check <<< "${GOSHA}"
   - tar -C "${HOME}/${GOV}" -xzf "go${GOV}.linux-amd64.tar.gz"
   # set maximum number of open file descriptors
-  - ulimit -n 8096
+  #- ulimit -n 8096
   # download & extract mattermost-server
   - wget -q "https://github.com/mattermost/mattermost-server/archive/v${V}.tar.gz" -O mattermost-server.tar.gz
   - tar -C "${SRCROOT}/mattermost-server" --strip-components=1 -xf mattermost-server.tar.gz
@@ -41,12 +41,11 @@ script:
   # workaround (instead of patch): platform binary is in GOOS_GOARCH, Makefile expects it in linux_amd64
   - ln -s "${GOPATH}/bin/linux_arm" "${GOPATH}/bin/linux_amd64"
   # install dependencies
-  - go get -d github.com/mattermost/mattermost-server/...
+  #- go get -d github.com/mattermost/mattermost-server/...
   # adapt and revert reverted commit, https://github.com/mattermost/mattermost-server/pull/8537
   - patch -d "${SRCROOT}/mattermost-server" -p1 < "${TRAVIS_BUILD_DIR}/build-release.patch"
   # workaround (instead of patch): overwrite GO variable to enforce desired GOARCH
   - make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" GO="GOARCH=arm $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
-  - ls -lR "${GOPATH}/bin"
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
   - mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
   - sha512sum "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz" | tee "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
