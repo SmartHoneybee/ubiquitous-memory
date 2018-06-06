@@ -28,8 +28,6 @@ before_install:
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
   - sha256sum --check <<< "${GOSHA}"
   - tar -C "${HOME}/${GOV}" -xzf "go${GOV}.linux-amd64.tar.gz"
-  # set maximum number of open file descriptors
-  #- ulimit -n 8096
   # download & extract mattermost-server
   - wget -q "https://github.com/mattermost/mattermost-server/archive/v${V}.tar.gz" -O mattermost-server.tar.gz
   - tar -C "${SRCROOT}/mattermost-server" --strip-components=1 -xf mattermost-server.tar.gz
@@ -40,8 +38,6 @@ script:
   - make build -C "${SRCROOT}/mattermost-webapp"
   # workaround (instead of patch): platform binary is in GOOS_GOARCH, Makefile expects it in linux_amd64
   - ln -s "${GOPATH}/bin/linux_arm" "${GOPATH}/bin/linux_amd64"
-  # install dependencies
-  #- go get -d github.com/mattermost/mattermost-server/...
   # adapt and revert reverted commit, https://github.com/mattermost/mattermost-server/pull/8537
   - patch -d "${SRCROOT}/mattermost-server" -p1 < "${TRAVIS_BUILD_DIR}/build-release.patch"
   # workaround (instead of patch): overwrite GO variable to enforce desired GOARCH
