@@ -1,20 +1,21 @@
 language: c
 dist: trusty
-sudo: required
 addons:
   apt:
     sources:
-      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu bionic universe multiverse'
-      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu bionic-updates universe multiverse'
-      - sourceline: 'deb-src http://security.ubuntu.com/ubuntu bionic-security universe'
       - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
         key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
       - sourceline: 'deb https://deb.nodesource.com/node_10.x trusty main'
         key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
+      # don't try this at home
+      - sourceline: 'deb http://archive.ubuntu.com/ubuntu bionic universe multiverse'
+      - sourceline: 'deb http://archive.ubuntu.com/ubuntu bionic-updates universe multiverse'
+      - sourceline: 'deb http://security.ubuntu.com/ubuntu bionic-security universe'
     packages:
       - nodejs
       - yarn
       - build-essential
+      - libpng16-16
 env:
   global:
     - GOV=1.10.3
@@ -38,9 +39,6 @@ before_install:
   # download & extract mattermost-webapp
   - wget -q "https://github.com/mattermost/mattermost-webapp/archive/v${V}.tar.gz" -O mattermost-webapp.tar.gz
   - tar -C "${SRCROOT}/mattermost-webapp" --strip-components=1 -xf mattermost-webapp.tar.gz
-  # (trusty is old:) backport libpng16-16
-  - sudo -E apt-get --build source libpng1.6
-  - sudo -E dpkg -i "./libpng16-16_*.deb"
 script:
   - make build -C "${SRCROOT}/mattermost-webapp"
   # workaround (instead of patch): platform binary is in GOOS_GOARCH, Makefile expects it in linux_amd64
