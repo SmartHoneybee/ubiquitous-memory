@@ -37,8 +37,8 @@ before_install:
   # download & extract mattermost-webapp
   - wget -q "https://github.com/mattermost/mattermost-webapp/archive/v${V}.tar.gz" -O mattermost-webapp.tar.gz
   - tar -C "${SRCROOT}/mattermost-webapp" --strip-components=1 -xf mattermost-webapp.tar.gz
-  # backport libpng16-16
-  - apt-get --build source libpng16-16
+  # (trusty is old:) backport libpng16-16
+  - apt-get --build source libpng1.6
   - dpkg -i "./libpng16-16_*.deb"
 script:
   - make build -C "${SRCROOT}/mattermost-webapp"
