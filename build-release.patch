@@ -11,7 +11,7 @@ diff --git a/build/release.mk b/build/release.mk
 index 238343e..1b7859f 100644
 --- a/build/release.mk
 +++ b/build/release.mk
-@@ -72,7 +72,7 @@ endif
+@@ -60,7 +60,7 @@ endif
  	cp README.md $(DIST_PATH)
  
  	@# ----- PLATFORM SPECIFIC -----
@@ -20,7 +20,7 @@ index 238343e..1b7859f 100644
  	@# Make osx package
  	@# Copy binary
  ifeq ($(BUILDER_GOOS_GOARCH),"darwin_amd64")
-@@ -102,7 +102,7 @@ endif
+@@ -90,7 +90,7 @@ endif
  	@# Cleanup
  	rm -f $(DIST_PATH)/bin/mattermost.exe
  	rm -f $(DIST_PATH)/bin/platform.exe
