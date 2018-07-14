@@ -13,8 +13,8 @@ addons:
       - build-essential
 env:
   global:
-    - GOV=1.10.2
-    - GOSHA="4b677d698c65370afa33757b6954ade60347aaca310ea92a63ed717d7cb0c2ff  go${GOV}.linux-amd64.tar.gz"
+    - GOV=1.10.3
+    - GOSHA="fa1b0e45d3b647c252f51f5e1204aba049cde4af177ef9f2181f43004f901035  go${GOV}.linux-amd64.tar.gz"
     - GOPATH="${HOME}/go"
     - GOROOT="${HOME}/${GOV}/go"
     - PATH="${GOROOT}/bin:${PATH}:${GOPATH}/bin"
