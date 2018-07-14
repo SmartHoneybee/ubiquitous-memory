@@ -8,9 +8,9 @@ addons:
         key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
       - sourceline: 'deb https://deb.nodesource.com/node_10.x trusty main'
         key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
-      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu bionic universe multiverse'
-      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu bionic-updates universe multiverse'
-      - sourceline: 'deb-src http://security.ubuntu.com/ubuntu bionic-security universe'
+      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu bionic main'
+      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu bionic-updates main'
+      - sourceline: 'deb-src http://security.ubuntu.com/ubuntu bionic-security main'
     packages:
       - nodejs
       - yarn
@@ -27,8 +27,6 @@ env:
   matrix:
     - V=5.1.0
 before_install:
-  - sudo -E apt-get update
-  - apt-get --build --target-release bionic source libpng16-16
   - install -d "${GOPATH}/bin" "${GOROOT}" "${SRCROOT}/mattermost-"{server,webapp}
   # download & extract golang
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
@@ -40,6 +38,9 @@ before_install:
   # download & extract mattermost-webapp
   - wget -q "https://github.com/mattermost/mattermost-webapp/archive/v${V}.tar.gz" -O mattermost-webapp.tar.gz
   - tar -C "${SRCROOT}/mattermost-webapp" --strip-components=1 -xf mattermost-webapp.tar.gz
+  # (trusty is old:) backport and install libpng16-16
+  - apt-get --build source libpng16-16
+  - sudo -E dpkg -i "./libpng16-16_*.deb"
 script:
   - make build -C "${SRCROOT}/mattermost-webapp"
   # workaround (instead of patch): platform binary is in GOOS_GOARCH, Makefile expects it in linux_amd64
