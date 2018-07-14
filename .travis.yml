@@ -1,5 +1,6 @@
 language: c
 dist: trusty
+sudo: required
 addons:
   apt:
     sources:
@@ -7,21 +8,26 @@ addons:
         key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
       - sourceline: 'deb https://deb.nodesource.com/node_10.x trusty main'
         key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
+      # libpng16-16
+      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu xenial universe'
+      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu xenial-updates universe'
+      - sourceline: 'deb-src http://security.ubuntu.com/ubuntu xenial-security universe'
     packages:
       - nodejs
       - yarn
       - build-essential
+      - fakeroot
 env:
   global:
-    - GOV=1.10.2
-    - GOSHA="4b677d698c65370afa33757b6954ade60347aaca310ea92a63ed717d7cb0c2ff  go${GOV}.linux-amd64.tar.gz"
+    - GOV=1.10.3
+    - GOSHA="fa1b0e45d3b647c252f51f5e1204aba049cde4af177ef9f2181f43004f901035  go${GOV}.linux-amd64.tar.gz"
     - GOPATH="${HOME}/go"
     - GOROOT="${HOME}/${GOV}/go"
     - PATH="${GOROOT}/bin:${PATH}:${GOPATH}/bin"
     - SRCROOT="${GOPATH}/src/github.com/mattermost"
     - GOARM=7
   matrix:
-    - V=5.0.1
+    - V=5.1.0
 before_install:
   - install -d "${GOPATH}/bin" "${GOROOT}" "${SRCROOT}/mattermost-"{server,webapp}
   # download & extract golang
@@ -34,6 +40,10 @@ before_install:
   # download & extract mattermost-webapp
   - wget -q "https://github.com/mattermost/mattermost-webapp/archive/v${V}.tar.gz" -O mattermost-webapp.tar.gz
   - tar -C "${SRCROOT}/mattermost-webapp" --strip-components=1 -xf mattermost-webapp.tar.gz
+    # (trusty is old:) backport and install libpng16-16
+  - sudo -E apt-get build-dep -yq libpng16-16
+  - apt-get --build source libpng16-16
+  - sudo -E dpkg -i ./libpng16-16_*.deb
 script:
   - make build -C "${SRCROOT}/mattermost-webapp"
   # workaround (instead of patch): platform binary is in GOOS_GOARCH, Makefile expects it in linux_amd64
