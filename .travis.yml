@@ -1,5 +1,6 @@
 language: c
 dist: trusty
+sudo: required
 addons:
   apt:
     sources:
@@ -7,15 +8,13 @@ addons:
         key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
       - sourceline: 'deb https://deb.nodesource.com/node_10.x trusty main'
         key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
-      # don't try this at home
-      - sourceline: 'deb http://archive.ubuntu.com/ubuntu bionic universe multiverse'
-      - sourceline: 'deb http://archive.ubuntu.com/ubuntu bionic-updates universe multiverse'
-      - sourceline: 'deb http://security.ubuntu.com/ubuntu bionic-security universe'
+      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu bionic universe multiverse'
+      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu bionic-updates universe multiverse'
+      - sourceline: 'deb-src http://security.ubuntu.com/ubuntu bionic-security universe'
     packages:
       - nodejs
       - yarn
       - build-essential
-      - libpng16-16
 env:
   global:
     - GOV=1.10.3
@@ -28,6 +27,7 @@ env:
   matrix:
     - V=5.1.0
 before_install:
+  - apt-get --build --target-release bionic source libpng16-16
   - install -d "${GOPATH}/bin" "${GOROOT}" "${SRCROOT}/mattermost-"{server,webapp}
   # download & extract golang
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
