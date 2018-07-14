@@ -15,6 +15,7 @@ addons:
       - nodejs
       - yarn
       - build-essential
+      - fakeroot
 env:
   global:
     - GOV=1.10.3
