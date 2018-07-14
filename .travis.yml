@@ -11,6 +11,7 @@ addons:
       - nodejs
       - yarn
       - build-essential
+      - libpng16-16
 env:
   global:
     - GOV=1.10.3
