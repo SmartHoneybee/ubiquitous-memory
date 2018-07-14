@@ -27,6 +27,7 @@ env:
   matrix:
     - V=5.1.0
 before_install:
+  - sudo -E apt-get update
   - apt-get --build --target-release bionic source libpng16-16
   - install -d "${GOPATH}/bin" "${GOROOT}" "${SRCROOT}/mattermost-"{server,webapp}
   # download & extract golang
