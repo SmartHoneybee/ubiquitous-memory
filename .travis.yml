@@ -9,9 +9,9 @@ addons:
       - sourceline: 'deb https://deb.nodesource.com/node_10.x trusty main'
         key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
       # libpng16-16
-      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu xenial main'
-      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu xenial-updates main'
-      - sourceline: 'deb-src http://security.ubuntu.com/ubuntu xenial-security main'
+      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu xenial universe'
+      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu xenial-updates universe'
+      - sourceline: 'deb-src http://security.ubuntu.com/ubuntu xenial-security universe'
     packages:
       - nodejs
       - yarn
