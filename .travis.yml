@@ -40,6 +40,9 @@ before_install:
   # download & extract mattermost-webapp
   - wget -q "https://github.com/mattermost/mattermost-webapp/archive/v${V}.tar.gz" -O mattermost-webapp.tar.gz
   - tar -C "${SRCROOT}/mattermost-webapp" --strip-components=1 -xf mattermost-webapp.tar.gz
+    # (trusty is old:) backport and install libpng16-16
+  - apt-get --build source libpng16-16
+  - sudo -E dpkg -i "./libpng16-16_*.deb"
 script:
   - make build -C "${SRCROOT}/mattermost-webapp"
   # workaround (instead of patch): platform binary is in GOOS_GOARCH, Makefile expects it in linux_amd64
@@ -51,9 +54,6 @@ script:
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
   - mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
   - sha512sum "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz" | tee "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
-    # (trusty is old:) backport and install libpng16-16
-  - apt-get --build source libpng16-16
-  - sudo -E dpkg -i "./libpng16-16_*.deb"
 deploy:
   provider: releases
   api_key: "${GITHUB_OAUTH_TOKEN}"
