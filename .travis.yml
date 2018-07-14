@@ -9,14 +9,14 @@ addons:
       - sourceline: 'deb https://deb.nodesource.com/node_10.x trusty main'
         key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
       # libpng16-16
-      - sourceline: 'deb http://archive.ubuntu.com/ubuntu bionic main'
-      - sourceline: 'deb http://archive.ubuntu.com/ubuntu bionic-updates main'
-      - sourceline: 'deb http://security.ubuntu.com/ubuntu bionic-security main'
+      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu xenial main'
+      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu xenial-updates main'
+      - sourceline: 'deb-src http://security.ubuntu.com/ubuntu xenial-security main'
     packages:
       - nodejs
       - yarn
       - build-essential
-      - libpng16-16
+      - fakeroot
 env:
   global:
     - GOV=1.10.3
@@ -51,6 +51,9 @@ script:
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
   - mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
   - sha512sum "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz" | tee "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
+    # (trusty is old:) backport and install libpng16-16
+  - apt-get --build source libpng16-16
+  - sudo -E dpkg -i "./libpng16-16_*.deb"
 deploy:
   provider: releases
   api_key: "${GITHUB_OAUTH_TOKEN}"
