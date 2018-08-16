@@ -21,9 +21,9 @@ index 238343e..1b7859f 100644
  	@# Copy binary
  ifeq ($(BUILDER_GOOS_GOARCH),"darwin_amd64")
 @@ -106,7 +106,7 @@ endif
- 	@# Cleanup
  	rm -f $(DIST_PATH)/bin/mattermost.exe
  	rm -f $(DIST_PATH)/bin/platform.exe
+ 	rm -f $(DIST_PATH)/prepackaged_plugins/*
 -
 +package-linux: package
  	@# Make linux package
