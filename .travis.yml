@@ -27,7 +27,7 @@ env:
     - SRCROOT="${GOPATH}/src/github.com/mattermost"
     - GOARM=7
   matrix:
-    - V=5.1.0
+    - V=5.2.0
 before_install:
   - install -d "${GOPATH}/bin" "${GOROOT}" "${SRCROOT}/mattermost-"{server,webapp}
   # download & extract golang
@@ -51,7 +51,7 @@ script:
   # adapt and revert reverted commit, https://github.com/mattermost/mattermost-server/pull/8537
   - patch -d "${SRCROOT}/mattermost-server" -p1 < "${TRAVIS_BUILD_DIR}/build-release.patch"
   # workaround (instead of patch): overwrite GO variable to enforce desired GOARCH
-  - make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" GO="GOARCH=arm $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
+  - make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" PLUGIN_PACKAGES="" GO="GOARCH=arm $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
   - mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
   - sha512sum "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz" | tee "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
