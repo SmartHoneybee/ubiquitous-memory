@@ -6,7 +6,7 @@ addons:
     sources:
       - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu artful universe'
     packages:
-      - build-essential
+      - fakeroot
 env:
   global:
     - GOV=1.11
