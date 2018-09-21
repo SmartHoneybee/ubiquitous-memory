@@ -1,10 +1,6 @@
 language: c
 dist: trusty
 sudo: required
-addons:
-  apt:
-    packages:
-      - libdevel-trace-perl
 env:
   global:
     - GOV=1.11
@@ -32,6 +28,7 @@ before_install:
   # setup build environment
   - sed -i -e '627s#$#$ess_pkgs{libpcre3} = ();#' mmdebstrap/mmdebstrap
   - sed -i -e '627s#$#$ess_pkgs{zlib1g} = ();#' mmdebstrap/mmdebstrap
+  - sed -i -e '627s#$#$ess_pkgs{libbz2-1.0} = ();#' mmdebstrap/mmdebstrap
   - sudo -E perl mmdebstrap/mmdebstrap --mode sudo --aptopt='Apt::Sandbox::User "root"' --variant buildd "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
   - sudo -E chroot "${MMDEBSTRAP_TARGET}"
   # download & extract golang
