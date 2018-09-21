@@ -1,22 +1,13 @@
 language: c
 dist: trusty
 sudo: required
-addons:
-  apt:
-    sources:
-      - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
-        key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
-      - sourceline: 'deb https://deb.nodesource.com/node_10.x trusty main'
-        key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
-      # libpng16-16
-      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu xenial universe'
-      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu xenial-updates universe'
-      - sourceline: 'deb-src http://security.ubuntu.com/ubuntu xenial-security universe'
-    packages:
-      - nodejs
-      - yarn
-      - build-essential
-      - fakeroot
+#addons:
+# apt:
+#   packages:
+#     - nodejs
+#     - yarn
+#     - build-essential
+#     - fakeroot
 env:
   global:
     - GOV=1.11
@@ -26,10 +17,22 @@ env:
     - PATH="${GOROOT}/bin:${PATH}:${GOPATH}/bin"
     - SRCROOT="${GOPATH}/src/github.com/mattermost"
     - GOARM=7
+    
+    - MMDEBSTRAP_COMMIT='550562cf6f45d77e9803ef3f99036fbd4ff4a0fd'
+    - MMDEBSTRAP_MIRROR='http://deb.debian.org/debian'
+    - MMDEBSTRAP_SUITE='stretch'
+    - MMDEBSTRAP_TARGET='build-chroot'
   matrix:
     - V=5.3.1
 before_install:
-  - install -d "${GOPATH}/bin" "${GOROOT}" "${SRCROOT}/mattermost-"{server,webapp}
+# checkout fixed mmdebstrap commit
+- git clone https://gitlab.mister-muffin.de/josch/mmdebstrap
+- pushd mmdebstrap
+- git reset --hard "${MMDEBSTRAP_COMMIT}"
+- popd
+# setup build environment
+- sudo -E mmdebstrap/mmdebstrap "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
+- sudo -E chroot "${MMDEBSTRAP_TARGET}"
   # download & extract golang
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
   - sha256sum --check <<< "${GOSHA}"
@@ -40,10 +43,6 @@ before_install:
   # download & extract mattermost-webapp
   - wget -q "https://github.com/mattermost/mattermost-webapp/archive/v${V}.tar.gz" -O mattermost-webapp.tar.gz
   - tar -C "${SRCROOT}/mattermost-webapp" --strip-components=1 -xf mattermost-webapp.tar.gz
-    # (trusty is old:) backport and install libpng16-16
-  - sudo -E apt-get build-dep -yq libpng16-16
-  - apt-get --build source libpng16-16
-  - sudo -E dpkg -i ./libpng16-16_*.deb
 script:
   - make build -C "${SRCROOT}/mattermost-webapp"
   # workaround (instead of patch): platform binary is in GOOS_GOARCH, Makefile expects it in linux_amd64
