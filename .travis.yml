@@ -29,10 +29,9 @@ before_install:
   - pushd mmdebstrap
   - git reset --hard "${MMDEBSTRAP_COMMIT}"
   - popd
-  # ensure debian keys are available
-  - sudo -E apt-get build-dep -yq debian-archive-keyring
-  - apt-get --build source debian-archive-keyring
-  - sudo -E dpkg -i ./debian-archive-keyring_*_all.deb
+  # receive missing debian key
+  - gpg --keyserver keyserver.ubuntu.com --recv 7638D0442B90D010
+  - gpg --export --armor 7638D0442B90D010 | apt-key add -
   # setup build environment
   - sudo -E mmdebstrap/mmdebstrap "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
   - sudo -E chroot "${MMDEBSTRAP_TARGET}"
