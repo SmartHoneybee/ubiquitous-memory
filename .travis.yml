@@ -1,6 +1,10 @@
 language: c
 dist: trusty
 sudo: required
+addons:
+  apt:
+    packages:
+      - libdevel-trace-perl
 env:
   global:
     - GOV=1.11
