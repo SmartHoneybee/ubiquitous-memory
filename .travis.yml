@@ -25,9 +25,9 @@ before_install:
   - popd
   - 
   sudo -E mmdebstrap/mmdebstrap --mode sudo --aptopt='Apt::Sandbox::User "root"' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" - <<EOF
-deb ${MMDEBSTRAP_MIRROR} ${MMDEBSTRAP_SUITE} main universe
-deb ${MMDEBSTRAP_MIRROR} ${MMDEBSTRAP_SUITE}-updates main universe
-EOF
+  deb ${MMDEBSTRAP_MIRROR} ${MMDEBSTRAP_SUITE} main universe
+  deb ${MMDEBSTRAP_MIRROR} ${MMDEBSTRAP_SUITE}-updates main universe
+  EOF
   - false && sudo -E chroot "${MMDEBSTRAP_TARGET}"
   # download & extract golang
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
