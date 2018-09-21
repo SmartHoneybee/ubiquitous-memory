@@ -31,7 +31,7 @@ before_install:
   - popd
   # receive missing debian key
   - gpg --keyserver keyserver.ubuntu.com --recv 7638D0442B90D010
-  - gpg --export --armor 7638D0442B90D010 | apt-key add -
+  - gpg --export --armor 7638D0442B90D010 | sudo -E apt-key add -
   # setup build environment
   - sudo -E mmdebstrap/mmdebstrap "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
   - sudo -E chroot "${MMDEBSTRAP_TARGET}"
