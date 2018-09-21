@@ -13,7 +13,7 @@ env:
     
     - MMDEBSTRAP_COMMIT='550562cf6f45d77e9803ef3f99036fbd4ff4a0fd'
     - MMDEBSTRAP_MIRROR='http://archive.ubuntu.com/ubuntu/'
-    - MMDEBSTRAP_SUITE='bionic'
+    - MMDEBSTRAP_SUITE='buster'
     - MMDEBSTRAP_TARGET='build-chroot'
   matrix:
     - V=5.3.1
@@ -23,7 +23,7 @@ before_install:
   - pushd mmdebstrap
   - git reset --hard "${MMDEBSTRAP_COMMIT}"
   - popd
-  - sudo -E mmdebstrap/mmdebstrap --mode='sudo' --aptopt='Apt::Sandbox::User "root"' --components='main,universe' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
+  - sudo -E mmdebstrap/mmdebstrap --mode='sudo' --aptopt='Apt::Sandbox::User "root"' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}"
   - false && sudo -E chroot "${MMDEBSTRAP_TARGET}"
   # download & extract golang
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
