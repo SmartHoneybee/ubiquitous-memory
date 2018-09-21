@@ -12,10 +12,7 @@ env:
     - GOARM=7
     
     - MMDEBSTRAP_COMMIT='550562cf6f45d77e9803ef3f99036fbd4ff4a0fd'
-    - MMDEBSTRAP_MIRROR0='deb http://archive.ubuntu.com/ubuntu/ bionic main universe'
-    - MMDEBSTRAP_MIRROR1='deb http://archive.ubuntu.com/ubuntu/ bionic-updates main universe
-    - MMDEBSTRAP_MIRROR2='deb http://security.ubuntu.com/ubuntu/ bionic-security main universe
-    - MMDEBSTRAP_MIRROR3='deb http://archive.ubuntu.com/ubuntu/ bionic-backports main universe'
+    - MMDEBSTRAP_MIRROR='http://archive.ubuntu.com/ubuntu/'
     - MMDEBSTRAP_SUITE='bionic'
     - MMDEBSTRAP_TARGET='build-chroot'
   matrix:
@@ -26,7 +23,7 @@ before_install:
   - pushd mmdebstrap
   - git reset --hard "${MMDEBSTRAP_COMMIT}"
   - popd
-  - echo -e "${MMDEBSTRAP_MIRROR0}\n${MMDEBSTRAP_MIRROR1}\n${MMDEBSTRAP_MIRROR2}\n${MMDEBSTRAP_MIRROR3}" | sudo -E mmdebstrap/mmdebstrap --mode sudo --variant essential --aptopt='Apt::Sandbox::User "root"' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" -
+  - sudo -E mmdebstrap/mmdebstrap --mode sudo --aptopt='Apt::Sandbox::User "root"' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
   - false && sudo -E chroot "${MMDEBSTRAP_TARGET}"
   # download & extract golang
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
