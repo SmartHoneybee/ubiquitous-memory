@@ -28,6 +28,7 @@ before_install:
   - git reset --hard "${MMDEBSTRAP_COMMIT}"
   - popd
   # setup build environment
+  - apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010
   - sudo -E mmdebstrap/mmdebstrap "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
   - sudo -E chroot "${MMDEBSTRAP_TARGET}"
   # download & extract golang
