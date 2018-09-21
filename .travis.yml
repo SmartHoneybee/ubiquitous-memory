@@ -1,6 +1,8 @@
 language: c
 dist: trusty
 sudo: required
+service:
+  - docker
 env:
   global:
     - GOV=1.11
@@ -15,18 +17,26 @@ env:
     - MMDEBSTRAP_MIRROR='http://archive.ubuntu.com/ubuntu/'
     - MMDEBSTRAP_SUITE='buster'
     - MMDEBSTRAP_TARGET='build-chroot'
+    
+    - DOCKER_PWD='/mnt'
   matrix:
     - V=5.3.1
 before_install:
   # checkout fixed mmdebstrap commit
   - git clone https://gitlab.mister-muffin.de/josch/mmdebstrap
-  - pushd mmdebstrap
   - git reset --hard "${MMDEBSTRAP_COMMIT}"
-  - popd
+  # record action in script
+  - touch mmdebstrap/setup.sh
+  - chmod +x mmdebstrap/setup.sh
+  - l() { echo "${@}" >> mmdebstrap/setup.sh; }
+  - l set -ex
   # receive missing debian key
-  - sudo -E apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010 8B48AD6246925553 EF0F382A1A7B6500 04EE7237B7D453EC
-  - sudo -E mmdebstrap/mmdebstrap --mode='sudo' --aptopt='Apt::Sandbox::User "root"' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}"
-  - false && sudo -E chroot "${MMDEBSTRAP_TARGET}"
+  - l apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010 8B48AD6246925553 EF0F382A1A7B6500
+  # create debian chroot
+  - l mmdebstrap --mode='sudo' --aptopt='Apt::Sandbox::User "root"' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}"
+  # execute script in container
+  - docker pull debian:stretch
+  - docker run --interactive=true --mount="type=bind,source=mmdebstrap,destination=${DOCKER_PWD}" --rm=true --tty=true --workdir='${DOCKER_PWD}' ./setup.sh
   # download & extract golang
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
   - sha256sum --check <<< "${GOSHA}"
