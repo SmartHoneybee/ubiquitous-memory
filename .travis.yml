@@ -3,8 +3,8 @@ dist: trusty
 sudo: required
 addons:
   apt:
-    packages: []
-#      - uidmap
+    packages:
+      - libpcre3
 env:
   global:
     - GOV=1.11
