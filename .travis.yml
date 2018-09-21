@@ -1,6 +1,10 @@
 language: c
 dist: trusty
 sudo: required
+addons:
+  apt:
+    packages:
+      - debian-archive-keyring
 env:
   global:
     - GOV=1.11
