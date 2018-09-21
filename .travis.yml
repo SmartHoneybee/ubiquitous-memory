@@ -1,13 +1,6 @@
 language: c
 dist: trusty
 sudo: required
-#addons:
-# apt:
-#   packages:
-#     - nodejs
-#     - yarn
-#     - build-essential
-#     - fakeroot
 env:
   global:
     - GOV=1.11
@@ -25,14 +18,14 @@ env:
   matrix:
     - V=5.3.1
 before_install:
-# checkout fixed mmdebstrap commit
-- git clone https://gitlab.mister-muffin.de/josch/mmdebstrap
-- pushd mmdebstrap
-- git reset --hard "${MMDEBSTRAP_COMMIT}"
-- popd
-# setup build environment
-- sudo -E mmdebstrap/mmdebstrap "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
-- sudo -E chroot "${MMDEBSTRAP_TARGET}"
+  # checkout fixed mmdebstrap commit
+  - git clone https://gitlab.mister-muffin.de/josch/mmdebstrap
+  - pushd mmdebstrap
+  - git reset --hard "${MMDEBSTRAP_COMMIT}"
+  - popd
+  # setup build environment
+  - sudo -E mmdebstrap/mmdebstrap "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
+  - sudo -E chroot "${MMDEBSTRAP_TARGET}"
   # download & extract golang
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
   - sha256sum --check <<< "${GOSHA}"
