@@ -3,8 +3,10 @@ dist: trusty
 sudo: required
 addons:
   apt:
+    sources:
+      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu artful universe'
     packages:
-      - debian-archive-keyring
+      - build-essential
 env:
   global:
     - GOV=1.11
@@ -27,8 +29,11 @@ before_install:
   - pushd mmdebstrap
   - git reset --hard "${MMDEBSTRAP_COMMIT}"
   - popd
+  # ensure debian keys are available
+  - sudo -E apt-get build-dep -yq debian-archive-keyring
+  - apt-get --build source debian-archive-keyring
+  - sudo -E dpkg -i ./debian-archive-keyring_*_all.deb
   # setup build environment
-  - apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010
   - sudo -E mmdebstrap/mmdebstrap "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
   - sudo -E chroot "${MMDEBSTRAP_TARGET}"
   # download & extract golang
