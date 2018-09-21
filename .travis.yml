@@ -23,6 +23,8 @@ before_install:
   - pushd mmdebstrap
   - git reset --hard "${MMDEBSTRAP_COMMIT}"
   - popd
+  # receive missing debian key
+  - sudo -E apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EF0F382A1A7B6500 
   - sudo -E mmdebstrap/mmdebstrap --mode='sudo' --aptopt='Apt::Sandbox::User "root"' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}"
   - false && sudo -E chroot "${MMDEBSTRAP_TARGET}"
   # download & extract golang
