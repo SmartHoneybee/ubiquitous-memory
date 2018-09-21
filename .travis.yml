@@ -26,9 +26,9 @@ before_install:
   # receive missing debian key
   - sudo -E apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010 8B48AD6246925553 EF0F382A1A7B6500
   # setup build environment
-  - sed -i -e '627s#$#$ess_pkgs{libpcre3} = ();#' mmdebstrap/mmdebstrap
-  - sed -i -e '627s#$#$ess_pkgs{zlib1g} = ();#' mmdebstrap/mmdebstrap
-  - sed -i -e '627s#$#$ess_pkgs{libbz2-1.0} = ();#' mmdebstrap/mmdebstrap
+  - sed -i -e '627s#$#$ess_pkgs{"libpcre3"} = ();#' mmdebstrap/mmdebstrap
+  - sed -i -e '627s#$#$ess_pkgs{"zlib1g"} = ();#' mmdebstrap/mmdebstrap
+  - sed -i -e '627s#$#$ess_pkgs{"libbz2-1.0"} = ();#' mmdebstrap/mmdebstrap
   - sudo -E perl mmdebstrap/mmdebstrap --mode sudo --aptopt='Apt::Sandbox::User "root"' --variant buildd "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
   - sudo -E chroot "${MMDEBSTRAP_TARGET}"
   # download & extract golang
