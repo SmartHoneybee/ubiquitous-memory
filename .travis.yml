@@ -12,7 +12,10 @@ env:
     - GOARM=7
     
     - MMDEBSTRAP_COMMIT='550562cf6f45d77e9803ef3f99036fbd4ff4a0fd'
-    - MMDEBSTRAP_MIRROR='http://archive.ubuntu.com/ubuntu'
+    - MMDEBSTRAP_MIRROR0='deb http://archive.ubuntu.com/ubuntu/ bionic main universe'
+    - MMDEBSTRAP_MIRROR1='deb http://archive.ubuntu.com/ubuntu/ bionic-updates main universe
+    - MMDEBSTRAP_MIRROR2='deb http://security.ubuntu.com/ubuntu/ bionic-security main universe
+    - MMDEBSTRAP_MIRROR3='deb http://archive.ubuntu.com/ubuntu/ bionic-backports main universe'
     - MMDEBSTRAP_SUITE='bionic'
     - MMDEBSTRAP_TARGET='build-chroot'
   matrix:
@@ -23,19 +26,8 @@ before_install:
   - pushd mmdebstrap
   - git reset --hard "${MMDEBSTRAP_COMMIT}"
   - popd
-  # receive missing debian key
-#  - sudo -E apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010 8B48AD6246925553 EF0F382A1A7B6500
-  # setup build environment
-#  - sed -i -e '627s#$#$ess_pkgs{"libpcre3"} = ();#' mmdebstrap/mmdebstrap
-#  - sed -i -e '627s#$#$ess_pkgs{"zlib1g"} = ();#' mmdebstrap/mmdebstrap
-#  - sed -i -e '627s#$#$ess_pkgs{"libbz2-1.0"} = ();#' mmdebstrap/mmdebstrap
-#  - sed -i -e '627s#$#$ess_pkgs{"libacl1"} = ();#' mmdebstrap/mmdebstrap
-#  - sed -i -e '627s#$#$ess_pkgs{"libattr1"} = ();#' mmdebstrap/mmdebstrap
-#  - sed -i -e '627s#$#$ess_pkgs{"libexpat1"} = ();#' mmdebstrap/mmdebstrap
-#  - sed -i -e '627s#$#$ess_pkgs{"libffi6"} = ();#' mmdebstrap/mmdebstrap
-#  - sed -i -e '627s#$#$ess_pkgs{"libdebconfclient0"} = ();#' mmdebstrap/mmdebstrap
-  - sudo -E perl mmdebstrap/mmdebstrap --mode sudo --variant essential --aptopt='Apt::Sandbox::User "root"' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
-  - sudo -E chroot "${MMDEBSTRAP_TARGET}"
+  - echo -e "${MMDEBSTRAP_MIRROR0}\n${MMDEBSTRAP_MIRROR1}\n${MMDEBSTRAP_MIRROR2}\n${MMDEBSTRAP_MIRROR3}" | sudo -E mmdebstrap/mmdebstrap --mode sudo --variant essential --aptopt='Apt::Sandbox::User "root"' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}"
+  - false && sudo -E chroot "${MMDEBSTRAP_TARGET}"
   # download & extract golang
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
   - sha256sum --check <<< "${GOSHA}"
