@@ -23,7 +23,7 @@ before_install:
   - pushd mmdebstrap
   - git reset --hard "${MMDEBSTRAP_COMMIT}"
   - popd
-  - 
+  - |
   sudo -E mmdebstrap/mmdebstrap --mode sudo --aptopt='Apt::Sandbox::User "root"' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" - <<EOF
   deb ${MMDEBSTRAP_MIRROR} ${MMDEBSTRAP_SUITE} main universe
   deb ${MMDEBSTRAP_MIRROR} ${MMDEBSTRAP_SUITE}-updates main universe
