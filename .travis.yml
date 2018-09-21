@@ -31,7 +31,7 @@ before_install:
   - sudo -E apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010 8B48AD6246925553 EF0F382A1A7B6500
   # setup build environment
   - sed -i -e '539s# or $has_error##' mmdebstrap/mmdebstrap
-  - sudo -E mmdebstrap/mmdebstrap --mode sudo "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
+  - sudo -E mmdebstrap/mmdebstrap --mode sudo --variant standard "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
   - sudo -E chroot "${MMDEBSTRAP_TARGET}"
   # download & extract golang
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
