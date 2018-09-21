@@ -22,9 +22,7 @@ env:
   matrix:
     - V=5.3.1
 before_install:
-  # checkout fixed mmdebstrap commit
   - git clone https://gitlab.mister-muffin.de/josch/mmdebstrap.git
-  - git checkout "${MMDEBSTRAP_COMMIT}"
   # record action in script
   - touch mmdebstrap/setup.sh
   - chmod +x mmdebstrap/setup.sh
