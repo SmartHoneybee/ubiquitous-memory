@@ -34,7 +34,7 @@ before_install:
   - sed -i -e '627s#$#$ess_pkgs{"libexpat1"} = ();#' mmdebstrap/mmdebstrap
   - sed -i -e '627s#$#$ess_pkgs{"libffi6"} = ();#' mmdebstrap/mmdebstrap
   - sed -i -e '627s#$#$ess_pkgs{"libdebconfclient0"} = ();#' mmdebstrap/mmdebstrap
-  - sudo -E perl mmdebstrap/mmdebstrap --mode sudo --variant apt --aptopt='Apt::Sandbox::User "root"' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
+  - sudo -E perl mmdebstrap/mmdebstrap --mode sudo --variant essential --aptopt='Apt::Sandbox::User "root"' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
   - sudo -E chroot "${MMDEBSTRAP_TARGET}"
   # download & extract golang
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
