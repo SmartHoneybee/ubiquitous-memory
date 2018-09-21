@@ -3,10 +3,8 @@ dist: trusty
 sudo: required
 addons:
   apt:
-    sources:
-      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu artful universe'
     packages:
-      - fakeroot
+      - uidmap
 env:
   global:
     - GOV=1.11
