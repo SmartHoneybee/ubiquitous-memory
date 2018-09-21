@@ -30,8 +30,7 @@ before_install:
   - git reset --hard "${MMDEBSTRAP_COMMIT}"
   - popd
   # receive missing debian key
-  - gpg --keyserver keyserver.ubuntu.com --recv 7638D0442B90D010
-  - gpg --export --armor 7638D0442B90D010 | sudo -E apt-key add -
+  - sudo -E apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010
   # setup build environment
   - sudo -E mmdebstrap/mmdebstrap "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}" "${MMDEBSTRAP_MIRROR}"
   - sudo -E chroot "${MMDEBSTRAP_TARGET}"
