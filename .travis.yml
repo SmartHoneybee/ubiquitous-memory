@@ -34,7 +34,7 @@ before_install:
   - l mmdebstrap --mode='sudo' --aptopt='Apt::Sandbox::User "root"' "${MMDEBSTRAP_SUITE}" "${MMDEBSTRAP_TARGET}"
   # execute script in container
   - docker pull debian:stretch
-  - docker run --interactive=true --mount="type=bind,source=mmdebstrap,destination=${DOCKER_PWD}" --rm=true --tty=true --workdir="${DOCKER_PWD}" debian:stretch ./setup.sh
+  - docker run --interactive=true --mount="type=bind,source=$(realpath mmdebstrap),destination=${DOCKER_PWD}" --rm=true --tty=true --workdir="${DOCKER_PWD}" debian:stretch ./setup.sh
   # download & extract golang
   - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
   - sha256sum --check <<< "${GOSHA}"
