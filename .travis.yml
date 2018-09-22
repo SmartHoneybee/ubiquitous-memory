@@ -41,7 +41,7 @@ before_install:
   - l make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" PLUGIN_PACKAGES="" GO="GOARCH=arm $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
   - l mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz"
-  - l sha512sum "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz" | tee "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz.sha512sum"
+  - l "sha512sum '${DOCKER_PWD}/mattermost-${V}-arm.tar.gz' | tee '${DOCKER_PWD}/mattermost-${V}-arm.tar.gz.sha512sum'"
   - docker pull "${DOCKER_IMAGE}"
   - chmod +x setup.sh
 script:
