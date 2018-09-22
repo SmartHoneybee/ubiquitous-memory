@@ -24,7 +24,7 @@ before_install:
   - l '#!/bin/bash'
   - l set -ex
   # setup backports
-  - l echo "deb http://deb.debian.org/debian ${DEBIAN_RELEASE}-backports main" > /etc/apt/sources.list.d/backports.list
+  - l "echo 'deb http://deb.debian.org/debian ${DEBIAN_RELEASE}-backports main' > /etc/apt/sources.list.d/backports.list"
   - l apt-get update
   # install golang & nodejs
   - l apt-get install -yqt "${DEBIAN_RELEASE}-backports" golang nodejs
