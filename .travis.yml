@@ -5,16 +5,12 @@ service:
   - docker
 env:
   global:
-    - GOV=1.11
-    - GOSHA="b3fcf280ff86558e0559e185b601c9eade0fd24c900b4c63cd14d1d38613e499  go${GOV}.linux-amd64.tar.gz"
-    - GOPATH="${HOME}/go"
-    - GOROOT="${HOME}/${GOV}/go"
-    - PATH="${GOROOT}/bin:${PATH}:${GOPATH}/bin"
-    - SRCROOT="${GOPATH}/src/github.com/mattermost"
-    - GOARM=7
     - DEBIAN_RELEASE='stretch'
     - DOCKER_PWD='/mnt'
     - DOCKER_IMAGE="debian:${DEBIAN_RELEASE}"
+    - GOPATH="${DOCKER_PWD}/go"
+    - GOARM=7
+    - SRCROOT="${GOPATH}/src/github.com/mattermost"    
   matrix:
     - V=5.3.1
 before_install:
@@ -44,8 +40,8 @@ before_install:
   # workaround (instead of patch): overwrite GO variable to enforce desired GOARCH
   - l make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" PLUGIN_PACKAGES="" GO="GOARCH=arm $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
-  - l mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
-  - l sha512sum "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz" | tee "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
+  - l mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz"
+  - l sha512sum "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz" | tee "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz.sha512sum"
   - docker pull "${DOCKER_IMAGE}"
   - chmod +x setup.sh
 script:
