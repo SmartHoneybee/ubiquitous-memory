@@ -12,8 +12,9 @@ env:
     - PATH="${GOROOT}/bin:${PATH}:${GOPATH}/bin"
     - SRCROOT="${GOPATH}/src/github.com/mattermost"
     - GOARM=7
+    - DEBIAN_RELEASE='stretch'
     - DOCKER_PWD='/mnt'
-    - DOCKER_IMAGE='debian:stretch'
+    - DOCKER_IMAGE="debian:${DEBIAN_RELEASE}"
   matrix:
     - V=5.3.1
 before_install:
@@ -22,11 +23,14 @@ before_install:
   - l() { echo "${@}" >> setup.sh; }
   - l '#!/bin/bash'
   - l set -ex
-  # download & extract golang
-  - # wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
-  - # sha256sum --check <<< "${GOSHA}"
-  - # tar -C "${HOME}/${GOV}" -xzf "go${GOV}.linux-amd64.tar.gz"
-  # download & extract mattermost-server
+  # setup backports
+  - l echo "deb http://deb.debian.org/debian ${DEBIAN_RELEASE}-backports main" > /etc/apt/sources.list.d/backports.list
+  - l apt-get update
+  # install golang & nodejs
+  - l apt-get install -yqt "${DEBIAN_RELEASE}-backports" golang nodejs
+  # install build dependencies
+  - l apt-get install -yq wget ca-certificates make patch
+  # download & extract mattermost-server  
   - l wget -q "https://github.com/mattermost/mattermost-server/archive/v${V}.tar.gz" -O mattermost-server.tar.gz
   - l tar -C "${SRCROOT}/mattermost-server" --strip-components=1 -xf mattermost-server.tar.gz
   # download & extract mattermost-webapp
