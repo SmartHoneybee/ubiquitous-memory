@@ -36,7 +36,7 @@ before_install:
   # workaround (instead of patch): platform binary is in GOOS_GOARCH, Makefile expects it in linux_amd64
   - l ln -s "${GOPATH}/bin/linux_arm" "${GOPATH}/bin/linux_amd64"
   # adapt and revert reverted commit, https://github.com/mattermost/mattermost-server/pull/8537
-  - l patch -d "${SRCROOT}/mattermost-server" -p1 < "${DOCKER_PWD}/build-release.patch"
+  - l patch -d "${SRCROOT}/mattermost-server" -p1 '<' "${DOCKER_PWD}/build-release.patch"
   # workaround (instead of patch): overwrite GO variable to enforce desired GOARCH
   - l make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" PLUGIN_PACKAGES="" GO="GOARCH=arm $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
