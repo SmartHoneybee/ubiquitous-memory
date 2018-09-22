@@ -22,7 +22,7 @@ before_install:
   - l install -d "${SRCROOT}/mattermost-{server,webapp}"
   - l echo 'APT::Install-Recommends "0"\; APT::Install-Suggests "0"\;' '>' /etc/apt/apt.conf.d/99reduce-it
   - l apt-get update
-  - l apt-get install -yq gnupg
+  - l apt-get install -yq gnupg2 dirmngr
   - l apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DD8F2338BAE7501E3DD5AC78C273792F7D83545D
   - l echo "deb http://deb.debian.org/debian ${DEBIAN_RELEASE}-backports main" '>' /etc/apt/sources.list.d/backports.list
   - l echo "deb https://deb.nodesource.com/node_10.x ${DEBIAN_RELEASE} main" '>' /etc/apt/sources.list.d/bad-node.list
