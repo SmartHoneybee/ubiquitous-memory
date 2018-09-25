@@ -15,7 +15,6 @@ env:
   matrix:
     - V=5.3.1
 before_install:
-  # record action in script
   - touch setup.sh
   - l() { echo "${@}" >> setup.sh; }
   - l '#!/bin/bash'
@@ -26,6 +25,7 @@ before_install:
   - l apt-get install -yq gnupg2 dirmngr apt-transport-https ca-certificates
   - l apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "${APT_KEY_NODEJS}"
   - l echo "deb http://deb.debian.org/debian ${DEBIAN_RELEASE}-backports main" '>' /etc/apt/sources.list.d/backports.list
+  - l echo "deb-src http://deb.debian.org/debian ${DEBIAN_RELEASE} main" '>' /etc/apt/sources.list.d/stable-source.list
   - l echo "deb https://deb.nodesource.com/node_10.x ${DEBIAN_RELEASE} main" '>' /etc/apt/sources.list.d/bad-node.list
   - l apt-get update
   # install build dependencies
