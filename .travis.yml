@@ -19,7 +19,7 @@ before_install:
   - l() { echo "${@}" >> setup.sh; }
   - l '#!/bin/bash'
   - l set -ex
-  - l install -d "${SRCROOT}/mattermost-{server,webapp}"
+  - l install -d "${SRCROOT}/mattermost-{server,webapp}" "${GOPATH}/bin"
   - l echo 'APT::Install-Recommends "0"\; APT::Install-Suggests "0"\;' '>' /etc/apt/apt.conf.d/99reduce-it
   - l apt-get update
   - l apt-get install -yq gnupg2 dirmngr apt-transport-https ca-certificates
