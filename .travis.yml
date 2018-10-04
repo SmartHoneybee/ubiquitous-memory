@@ -12,7 +12,7 @@ env:
     - GOPATH="${DOCKER_PWD}/go"
     - SRCROOT="${GOPATH}/src/github.com/mattermost"    
   matrix:
-    - V=5.3.1
+    - V=5.4.0-rc1
 before_install:
   - touch setup.sh
   - l() { echo "${@}" >> setup.sh; }
