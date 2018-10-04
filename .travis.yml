@@ -7,10 +7,10 @@ env:
   global:
     - APT_KEY_NODEJS='9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280'
     - DEBIAN_RELEASE='stretch'
-    - DOCKER_BUILD_DIR='build'
+    - DOCKER_BUILD_USER='build-user'
     - DOCKER_PWD='/root'
     - DOCKER_IMAGE="debian:${DEBIAN_RELEASE}"
-    - GOPATH="${DOCKER_BUILD_DIR}/go"
+    - GOPATH="${DOCKER_BUILD_USER}/go"
     - SRCROOT="${GOPATH}/src/github.com/mattermost"    
   matrix:
     - V=5.4.0-rc1
@@ -21,7 +21,7 @@ before_install:
   - l set -ex
   # setup build environment
   - l 'if [ ${UID} -eq 0 ]; then'
-  - l useradd -md "${DOCKER_PWD}/${DOCKER_BUILD_DIR}" build-user
+  - l useradd -md "${DOCKER_PWD}/${DOCKER_BUILD_USER}" "${DOCKER_BUILD_USER}"
   - l echo 'APT::Install-Recommends "0"\; APT::Install-Suggests "0"\;' '>' /etc/apt/apt.conf.d/99reduce-it
   - l apt-get update
   - l apt-get install -yq gnupg2 dirmngr apt-transport-https ca-certificates
@@ -33,8 +33,8 @@ before_install:
   - l apt-get install -yqt "${DEBIAN_RELEASE}-backports" golang
   - l apt-get install -yq wget build-essential patch git nodejs
   - l apt-get build-dep -yq pngquant
-  - l cp --verbose '"${0}"' "${DOCKER_PWD}/${DOCKER_BUILD_DIR}"
-  - l exec su --login --shell /bin/bash build-user '"${0}"' '"${@}"'
+  - l cp --verbose '"${0}"' "${DOCKER_PWD}/${DOCKER_BUILD_USER}"
+  - l exec su --login --shell /bin/bash "${DOCKER_BUILD_USER}" '"${0}"' '"${@}"'
   - l 'fi'
   # build as non-root user
   - l install -d "${SRCROOT}/mattermost-{server,webapp}" "${GOPATH}/bin"
