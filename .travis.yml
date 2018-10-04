@@ -53,17 +53,18 @@ before_install:
   - l export GOPATH="${GOPATH}" GOARM=7
   - l make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" PLUGIN_PACKAGES="" GO='"GOARCH=arm $(which go)"' BUILD_NUMBER="dev-arm-tag${V}"
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
-  - l mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz"
+  - l mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${DOCKER_PWD}/${DOCKER_BUILD_USER}/mattermost-${V}-arm.tar.gz"
   - l sha512sum "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz" '|' tee "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz.sha512sum"
   - docker pull "${DOCKER_IMAGE}"
   - chmod +x setup.sh
 script:
   - docker run --interactive=true --mount="type=bind,source=${PWD},destination=${DOCKER_PWD}" --rm=true --tty=true --workdir="${DOCKER_PWD}" "${DOCKER_IMAGE}" ./setup.sh
+  - ls -l "${TRAVIS_BUILD_DIR}/${DOCKER_BUILD_USER}"
 deploy:
   provider: releases
   api_key: "${GITHUB_OAUTH_TOKEN}"
   file:
-    - "${TRAVIS_BUILD_DIR}/setup.sh"
-    - "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
-    - "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
+    - "${TRAVIS_BUILD_DIR}/${DOCKER_BUILD_USER}/setup.sh"
+    - "${TRAVIS_BUILD_DIR}/${DOCKER_BUILD_USER}/mattermost-${V}-arm.tar.gz"
+    - "${TRAVIS_BUILD_DIR}/${DOCKER_BUILD_USER}/mattermost-${V}-arm.tar.gz.sha512sum"
   skip_cleanup: true
