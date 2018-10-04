@@ -34,7 +34,7 @@ before_install:
   - l apt-get install -yq wget build-essential patch git nodejs
   - l apt-get build-dep -yq pngquant
   - l cp --verbose '"${0}"' "${DOCKER_PWD}/${DOCKER_BUILD_DIR}"
-  - l exec su -l build-user '"${0}"' '"${@}"'
+  - l exec su --login --shell /bin/bash build-user '"${0}"' '"${@}"'
   - l 'fi'
   # build as non-root user
   - l install -d "${SRCROOT}/mattermost-{server,webapp}" "${GOPATH}/bin"
