@@ -15,11 +15,10 @@ env:
   matrix:
     - V=5.4.0-rc1
 before_install:
-  # preamble
   - l() { echo "${@}" >> setup.sh; }
   - l '#!/bin/bash'
   - l set -ex
-  # setup build environment
+  # setup build environment as root
   - l 'if [ ${UID} -eq 0 ]; then'
   - l useradd -md "${DOCKER_PWD}/${DOCKER_BUILD_USER}" "${DOCKER_BUILD_USER}"
   - l echo 'APT::Install-Recommends "0"\; APT::Install-Suggests "0"\;' '>' /etc/apt/apt.conf.d/99reduce-it
@@ -35,7 +34,8 @@ before_install:
   - l apt-get build-dep -yq pngquant
   - l install -d -o "${DOCKER_BUILD_USER}" '"$(go env GOROOT)/pkg/linux_arm"'
   - l cp --verbose '"${0}"' "${DOCKER_PWD}/${DOCKER_BUILD_USER}"
-  - l exec su --login --shell /bin/bash "${DOCKER_BUILD_USER}" '"${0}"' '"${@}"'
+  # switch to non-root user
+  - l exec su --shell /bin/bash --login "${DOCKER_BUILD_USER}" '"${0}"' '"${@}"'
   - l 'fi'
   # build as non-root user
   - l install -d "${SRCROOT}/mattermost-{server,webapp}" "${GOPATH}/bin"
@@ -54,12 +54,11 @@ before_install:
   - l make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" PLUGIN_PACKAGES="" GO='"GOARCH=arm $(which go)"' BUILD_NUMBER="dev-arm-tag${V}"
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
   - l mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${DOCKER_PWD}/${DOCKER_BUILD_USER}/mattermost-${V}-arm.tar.gz"
-  - l sha512sum "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz" '|' tee "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz.sha512sum"
+  - l sha512sum "${DOCKER_PWD}/${DOCKER_BUILD_USER}/mattermost-${V}-arm.tar.gz" '|' tee "${DOCKER_PWD}/${DOCKER_BUILD_USER}/mattermost-${V}-arm.tar.gz.sha512sum"
   - docker pull "${DOCKER_IMAGE}"
   - chmod +x setup.sh
 script:
   - docker run --interactive=true --mount="type=bind,source=${PWD},destination=${DOCKER_PWD}" --rm=true --tty=true --workdir="${DOCKER_PWD}" "${DOCKER_IMAGE}" ./setup.sh
-  - ls -l "${TRAVIS_BUILD_DIR}/${DOCKER_BUILD_USER}"
 deploy:
   provider: releases
   api_key: "${GITHUB_OAUTH_TOKEN}"
