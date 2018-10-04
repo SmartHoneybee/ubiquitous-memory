@@ -31,7 +31,7 @@ before_install:
   - l echo "deb-src http://deb.debian.org/debian ${DEBIAN_RELEASE} main" '>' /etc/apt/sources.list.d/stable-source.list
   - l echo "deb https://deb.nodesource.com/node_10.x ${DEBIAN_RELEASE} main" '>' /etc/apt/sources.list.d/bad-node.list
   - l apt-get update
-  - l apt-get install -yqt "${DEBIAN_RELEASE}-backports" golang:amd64 golang:armhf
+  - l apt-get install -yqt "${DEBIAN_RELEASE}-backports" golang-go:amd64 golang-go:armhf
   - l apt-get install -yq wget build-essential patch git nodejs
   - l apt-get build-dep -yq pngquant
   - l cp --verbose '"${0}"' "${DOCKER_PWD}/${DOCKER_BUILD_USER}"
