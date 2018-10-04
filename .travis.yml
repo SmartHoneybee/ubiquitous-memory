@@ -7,18 +7,20 @@ env:
   global:
     - APT_KEY_NODEJS='9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280'
     - DEBIAN_RELEASE='stretch'
+    - DOCKER_BUILD_DIR='/build'
     - DOCKER_PWD='/root'
     - DOCKER_IMAGE="debian:${DEBIAN_RELEASE}"
-    - GOPATH="${DOCKER_PWD}/go"
+    - GOPATH="${DOCKER_BUILD_DIR}/go"
     - SRCROOT="${GOPATH}/src/github.com/mattermost"    
   matrix:
     - V=5.4.0-rc1
 before_install:
-  - touch setup.sh
+  # preamble
   - l() { echo "${@}" >> setup.sh; }
   - l '#!/bin/bash'
   - l set -ex
-  - l install -d "${SRCROOT}/mattermost-{server,webapp}" "${GOPATH}/bin"
+  # setup build environment
+  - l useradd -md "${DOCKER_BUILD_DIR}" build-user
   - l echo 'APT::Install-Recommends "0"\; APT::Install-Suggests "0"\;' '>' /etc/apt/apt.conf.d/99reduce-it
   - l apt-get update
   - l apt-get install -yq gnupg2 dirmngr apt-transport-https ca-certificates
@@ -27,20 +29,17 @@ before_install:
   - l echo "deb-src http://deb.debian.org/debian ${DEBIAN_RELEASE} main" '>' /etc/apt/sources.list.d/stable-source.list
   - l echo "deb https://deb.nodesource.com/node_10.x ${DEBIAN_RELEASE} main" '>' /etc/apt/sources.list.d/bad-node.list
   - l apt-get update
-  # install build dependencies
   - l apt-get install -yqt "${DEBIAN_RELEASE}-backports" golang
   - l apt-get install -yq wget build-essential patch git nodejs
   - l apt-get build-dep -yq pngquant
+  # build as non-root user
+  - l su -ls /bin/bash -c '<<BUILD_AS_NON_ROOT'
+  - l install -d "${SRCROOT}/mattermost-{server,webapp}" "${GOPATH}/bin"
   - l npm install yarn
-  # download & extract mattermost-server
   - l wget -q "https://github.com/mattermost/mattermost-server/archive/v${V}.tar.gz" -O mattermost-server.tar.gz
   - l tar -C "${SRCROOT}/mattermost-server" --strip-components=1 -xf mattermost-server.tar.gz
-  # download & extract mattermost-webapp
   - l wget -q "https://github.com/mattermost/mattermost-webapp/archive/v${V}.tar.gz" -O mattermost-webapp.tar.gz
   - l tar -C "${SRCROOT}/mattermost-webapp" --strip-components=1 -xf mattermost-webapp.tar.gz
-  - l export npm_config_loglevel='silly'
-  #- l make node_modules -C "${SRCROOT}/mattermost-webapp"
-  #- l cd "${SRCROOT}/mattermost-webapp/node_modules/mattermost-redux" '&&' npm run build '&&' cd -
   - l make build -C "${SRCROOT}/mattermost-webapp"
   # workaround (instead of patch): platform binary is in GOOS_GOARCH, Makefile expects it in linux_amd64
   - l ln -s "${GOPATH}/bin/linux_arm" "${GOPATH}/bin/linux_amd64"
@@ -51,6 +50,9 @@ before_install:
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
   - l mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz"
   - l sha512sum "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz" '|' tee "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz.sha512sum"
+  - l BUILD_AS_NON_ROOT build-user
+  # build finished; copy build artifacts
+  - l find "${DOCKER_BUILD_DIR}" -maxdepth 1 -type f '|' xargs cp --verbose --target-directory="${DOCKER_PWD}"
   - docker pull "${DOCKER_IMAGE}"
   - chmod +x setup.sh
 script:
