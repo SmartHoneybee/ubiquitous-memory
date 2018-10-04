@@ -10,7 +10,7 @@ env:
     - DOCKER_BUILD_USER='build-user'
     - DOCKER_PWD='/root'
     - DOCKER_IMAGE="debian:${DEBIAN_RELEASE}"
-    - GOPATH="go"
+    - GOPATH='${HOME}/go'
     - SRCROOT="${GOPATH}/src/github.com/mattermost"    
   matrix:
     - V=5.4.0-rc1
@@ -49,7 +49,8 @@ before_install:
   # adapt and revert reverted commit, https://github.com/mattermost/mattermost-server/pull/8537
   - l patch -d "${SRCROOT}/mattermost-server" -p1 '<' "${DOCKER_PWD}/build-release.patch"
   # workaround (instead of patch): overwrite GO variable to enforce desired GOARCH
-  - l make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" PLUGIN_PACKAGES="" GO='"GOARM=7 GOARCH=arm $(which go)"' BUILD_NUMBER="dev-arm-tag${V}"
+  - l export GOPATH="${GOPATH}" GOARM=7
+  - l make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" PLUGIN_PACKAGES="" GO='"GOARCH=arm $(which go)"' BUILD_NUMBER="dev-arm-tag${V}"
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
   - l mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz"
   - l sha512sum "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz" '|' tee "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz.sha512sum"
