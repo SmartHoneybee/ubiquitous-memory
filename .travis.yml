@@ -20,7 +20,8 @@ before_install:
   - l '#!/bin/bash'
   - l set -ex
   # setup build environment
-  - l useradd -md "${DOCKER_BUILD_DIR}" build-user
+  - l 'if [ ${UID} -eq 0 ]; then'
+  - l useradd -md "${DOCKER_PWD}/${DOCKER_BUILD_DIR}" build-user
   - l echo 'APT::Install-Recommends "0"\; APT::Install-Suggests "0"\;' '>' /etc/apt/apt.conf.d/99reduce-it
   - l apt-get update
   - l apt-get install -yq gnupg2 dirmngr apt-transport-https ca-certificates
@@ -32,8 +33,9 @@ before_install:
   - l apt-get install -yqt "${DEBIAN_RELEASE}-backports" golang
   - l apt-get install -yq wget build-essential patch git nodejs
   - l apt-get build-dep -yq pngquant
+  - l exec su -l build-user '"${0}"' '"${@}"'
+  - l 'fi'
   # build as non-root user
-  - l su -ls /bin/bash -c '<<BUILD_AS_NON_ROOT'
   - l install -d "${SRCROOT}/mattermost-{server,webapp}" "${GOPATH}/bin"
   - l npm install yarn
   - l wget -q "https://github.com/mattermost/mattermost-server/archive/v${V}.tar.gz" -O mattermost-server.tar.gz
@@ -50,9 +52,6 @@ before_install:
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
   - l mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz"
   - l sha512sum "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz" '|' tee "${DOCKER_PWD}/mattermost-${V}-arm.tar.gz.sha512sum"
-  - l BUILD_AS_NON_ROOT build-user
-  # build finished; copy build artifacts
-  - l find "${DOCKER_BUILD_DIR}" -maxdepth 1 -type f '|' xargs cp --verbose --target-directory="${DOCKER_PWD}"
   - docker pull "${DOCKER_IMAGE}"
   - chmod +x setup.sh
 script:
