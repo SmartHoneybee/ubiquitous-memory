@@ -7,7 +7,7 @@ env:
   global:
     - APT_KEY_NODEJS='9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280'
     - DEBIAN_RELEASE='stretch'
-    - DOCKER_BUILD_DIR='/build'
+    - DOCKER_BUILD_DIR='build'
     - DOCKER_PWD='/root'
     - DOCKER_IMAGE="debian:${DEBIAN_RELEASE}"
     - GOPATH="${DOCKER_BUILD_DIR}/go"
@@ -33,7 +33,7 @@ before_install:
   - l apt-get install -yqt "${DEBIAN_RELEASE}-backports" golang
   - l apt-get install -yq wget build-essential patch git nodejs
   - l apt-get build-dep -yq pngquant
-  - l cp --verbose "${0}" "${DOCKER_PWD}/${DOCKER_BUILD_DIR}"
+  - l cp --verbose '"${0}"' "${DOCKER_PWD}/${DOCKER_BUILD_DIR}"
   - l exec su -l build-user '"${0}"' '"${@}"'
   - l 'fi'
   # build as non-root user
