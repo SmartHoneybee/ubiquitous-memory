@@ -38,6 +38,8 @@ before_install:
   # download & extract mattermost-webapp
   - l wget -q "https://github.com/mattermost/mattermost-webapp/archive/v${V}.tar.gz" -O mattermost-webapp.tar.gz
   - l tar -C "${SRCROOT}/mattermost-webapp" --strip-components=1 -xf mattermost-webapp.tar.gz
+  - l make node_modules -C "${SRCROOT}/mattermost-webapp"
+  - l cd "${SRCROOT}/mattermost-webapp/node_modules/mattermost-redux" && npm run build && cd -
   - l make build -C "${SRCROOT}/mattermost-webapp"
   # workaround (instead of patch): platform binary is in GOOS_GOARCH, Makefile expects it in linux_amd64
   - l ln -s "${GOPATH}/bin/linux_arm" "${GOPATH}/bin/linux_amd64"
