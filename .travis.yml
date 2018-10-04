@@ -23,7 +23,6 @@ before_install:
   - l 'if [ ${UID} -eq 0 ]; then'
   - l useradd -md "${DOCKER_PWD}/${DOCKER_BUILD_USER}" "${DOCKER_BUILD_USER}"
   - l echo 'APT::Install-Recommends "0"\; APT::Install-Suggests "0"\;' '>' /etc/apt/apt.conf.d/99reduce-it
-  - l dpkg --add-architecture armhf
   - l apt-get update
   - l apt-get install -yq gnupg2 dirmngr apt-transport-https ca-certificates
   - l apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "${APT_KEY_NODEJS}"
@@ -31,9 +30,10 @@ before_install:
   - l echo "deb-src http://deb.debian.org/debian ${DEBIAN_RELEASE} main" '>' /etc/apt/sources.list.d/stable-source.list
   - l echo "deb https://deb.nodesource.com/node_10.x ${DEBIAN_RELEASE} main" '>' /etc/apt/sources.list.d/bad-node.list
   - l apt-get update
-  - l apt-get install -yqt "${DEBIAN_RELEASE}-backports" golang-go:amd64 golang-go:armhf
+  - l apt-get install -yqt "${DEBIAN_RELEASE}-backports" golang-go
   - l apt-get install -yq wget build-essential patch git nodejs
   - l apt-get build-dep -yq pngquant
+  - l install -d -o "${DOCKER_BUILD_USER}" "$(go env GOROOT)/pkg/linux_arm"
   - l cp --verbose '"${0}"' "${DOCKER_PWD}/${DOCKER_BUILD_USER}"
   - l exec su --login --shell /bin/bash "${DOCKER_BUILD_USER}" '"${0}"' '"${@}"'
   - l 'fi'
