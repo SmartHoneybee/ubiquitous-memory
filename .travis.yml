@@ -10,7 +10,7 @@ env:
     - DOCKER_BUILD_USER='build-user'
     - DOCKER_PWD='/root'
     - DOCKER_IMAGE="debian:${DEBIAN_RELEASE}"
-    - GOPATH="${DOCKER_BUILD_USER}/go"
+    - GOPATH="go"
     - SRCROOT="${GOPATH}/src/github.com/mattermost"    
   matrix:
     - V=5.4.0-rc1
