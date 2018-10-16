@@ -1,64 +1,69 @@
 language: c
 dist: trusty
 sudo: required
-addons:
-  apt:
-    sources:
-      - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
-        key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
-      - sourceline: 'deb https://deb.nodesource.com/node_10.x trusty main'
-        key_url: 'https://deb.nodesource.com/gpgkey/nodesource.gpg.key'
-      # libpng16-16
-      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu xenial universe'
-      - sourceline: 'deb-src http://archive.ubuntu.com/ubuntu xenial-updates universe'
-      - sourceline: 'deb-src http://security.ubuntu.com/ubuntu xenial-security universe'
-    packages:
-      - nodejs
-      - yarn
-      - build-essential
-      - fakeroot
+service:
+  - docker
 env:
   global:
-    - GOV=1.11
-    - GOSHA="b3fcf280ff86558e0559e185b601c9eade0fd24c900b4c63cd14d1d38613e499  go${GOV}.linux-amd64.tar.gz"
-    - GOPATH="${HOME}/go"
-    - GOROOT="${HOME}/${GOV}/go"
-    - PATH="${GOROOT}/bin:${PATH}:${GOPATH}/bin"
-    - SRCROOT="${GOPATH}/src/github.com/mattermost"
-    - GOARM=7
+    - APT_KEY_NODEJS='9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280'
+    - DEBIAN_RELEASE='stretch'
+    - DOCKER_BUILD_USER='build-user'
+    - DOCKER_PWD='/root'
+    - DOCKER_IMAGE="debian:${DEBIAN_RELEASE}"
+    - GOPATH='${HOME}/go'
+    - SRCROOT="${GOPATH}/src/github.com/mattermost"    
   matrix:
-    - V=5.3.1
+    - V=5.4.0
 before_install:
-  - install -d "${GOPATH}/bin" "${GOROOT}" "${SRCROOT}/mattermost-"{server,webapp}
-  # download & extract golang
-  - wget -q "https://storage.googleapis.com/golang/go${GOV}.linux-amd64.tar.gz"
-  - sha256sum --check <<< "${GOSHA}"
-  - tar -C "${HOME}/${GOV}" -xzf "go${GOV}.linux-amd64.tar.gz"
-  # download & extract mattermost-server
-  - wget -q "https://github.com/mattermost/mattermost-server/archive/v${V}.tar.gz" -O mattermost-server.tar.gz
-  - tar -C "${SRCROOT}/mattermost-server" --strip-components=1 -xf mattermost-server.tar.gz
-  # download & extract mattermost-webapp
-  - wget -q "https://github.com/mattermost/mattermost-webapp/archive/v${V}.tar.gz" -O mattermost-webapp.tar.gz
-  - tar -C "${SRCROOT}/mattermost-webapp" --strip-components=1 -xf mattermost-webapp.tar.gz
-    # (trusty is old:) backport and install libpng16-16
-  - sudo -E apt-get build-dep -yq libpng16-16
-  - apt-get --build source libpng16-16
-  - sudo -E dpkg -i ./libpng16-16_*.deb
-script:
-  - make build -C "${SRCROOT}/mattermost-webapp"
+  - l() { echo "${@}" >> setup.sh; }
+  - l '#!/bin/bash'
+  - l set -ex
+  # setup build environment as root
+  - l 'if [ ${UID} -eq 0 ]; then'
+  - l useradd -md "${DOCKER_PWD}/${DOCKER_BUILD_USER}" "${DOCKER_BUILD_USER}"
+  - l echo 'APT::Install-Recommends "0"\; APT::Install-Suggests "0"\;' '>' /etc/apt/apt.conf.d/99reduce-it
+  - l apt-get update
+  - l apt-get install -yq gnupg2 dirmngr apt-transport-https ca-certificates
+  - l apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "${APT_KEY_NODEJS}"
+  - l echo "deb http://deb.debian.org/debian ${DEBIAN_RELEASE}-backports main" '>' /etc/apt/sources.list.d/backports.list
+  - l echo "deb-src http://deb.debian.org/debian ${DEBIAN_RELEASE} main" '>' /etc/apt/sources.list.d/stable-source.list
+  - l echo "deb https://deb.nodesource.com/node_10.x ${DEBIAN_RELEASE} main" '>' /etc/apt/sources.list.d/bad-node.list
+  - l apt-get update
+  - l apt-get install -yqt "${DEBIAN_RELEASE}-backports" golang-go
+  - l apt-get install -yq wget build-essential patch git nodejs
+  - l apt-get build-dep -yq pngquant
+  - l install -d -o "${DOCKER_BUILD_USER}" '"$(go env GOROOT)/pkg/linux_arm"'
+  - l cp --verbose '"${0}"' "${DOCKER_PWD}/${DOCKER_BUILD_USER}"
+  # switch to non-root user
+  - l exec su --shell /bin/bash --login "${DOCKER_BUILD_USER}" '"${0}"' '"${@}"'
+  - l 'fi'
+  # build as non-root user
+  - l install -d "${SRCROOT}/mattermost-{server,webapp}" "${GOPATH}/bin"
+  - l npm install yarn
+  - l wget -q "https://github.com/mattermost/mattermost-server/archive/v${V}.tar.gz" -O mattermost-server.tar.gz
+  - l tar -C "${SRCROOT}/mattermost-server" --strip-components=1 -xf mattermost-server.tar.gz
+  - l wget -q "https://github.com/mattermost/mattermost-webapp/archive/v${V}.tar.gz" -O mattermost-webapp.tar.gz
+  - l tar -C "${SRCROOT}/mattermost-webapp" --strip-components=1 -xf mattermost-webapp.tar.gz
+  - l make build -C "${SRCROOT}/mattermost-webapp"
   # workaround (instead of patch): platform binary is in GOOS_GOARCH, Makefile expects it in linux_amd64
-  - ln -s "${GOPATH}/bin/linux_arm" "${GOPATH}/bin/linux_amd64"
+  - l ln -s "${GOPATH}/bin/linux_arm" "${GOPATH}/bin/linux_amd64"
   # adapt and revert reverted commit, https://github.com/mattermost/mattermost-server/pull/8537
-  - patch -d "${SRCROOT}/mattermost-server" -p1 < "${TRAVIS_BUILD_DIR}/build-release.patch"
+  - l patch -d "${SRCROOT}/mattermost-server" -p1 '<' "${DOCKER_PWD}/build-release.patch"
   # workaround (instead of patch): overwrite GO variable to enforce desired GOARCH
-  - make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" PLUGIN_PACKAGES="" GO="GOARCH=arm $(which go)" BUILD_NUMBER="dev-arm-tag${V}"
+  - l export GOPATH="${GOPATH}" GOARM=7
+  - l make config-reset build-linux package-linux -C "${SRCROOT}/mattermost-server" PLUGIN_PACKAGES="" GO='"GOARCH=arm $(which go)"' BUILD_NUMBER="dev-arm-tag${V}"
   # workaround (instead of patch): Makefile creates *-amd64.tar.gz
-  - mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
-  - sha512sum "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz" | tee "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
+  - l mv "${SRCROOT}/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" "${DOCKER_PWD}/${DOCKER_BUILD_USER}/mattermost-${V}-arm.tar.gz"
+  - l sha512sum "${DOCKER_PWD}/${DOCKER_BUILD_USER}/mattermost-${V}-arm.tar.gz" '|' tee "${DOCKER_PWD}/${DOCKER_BUILD_USER}/mattermost-${V}-arm.tar.gz.sha512sum"
+  - docker pull "${DOCKER_IMAGE}"
+  - chmod +x setup.sh
+script:
+  - docker run --interactive=true --mount="type=bind,source=${PWD},destination=${DOCKER_PWD}" --rm=true --tty=true --workdir="${DOCKER_PWD}" "${DOCKER_IMAGE}" ./setup.sh
 deploy:
   provider: releases
   api_key: "${GITHUB_OAUTH_TOKEN}"
   file:
-    - "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz"
-    - "${TRAVIS_BUILD_DIR}/mattermost-${V}-arm.tar.gz.sha512sum"
+    - "${TRAVIS_BUILD_DIR}/${DOCKER_BUILD_USER}/setup.sh"
+    - "${TRAVIS_BUILD_DIR}/${DOCKER_BUILD_USER}/mattermost-${V}-arm.tar.gz"
+    - "${TRAVIS_BUILD_DIR}/${DOCKER_BUILD_USER}/mattermost-${V}-arm.tar.gz.sha512sum"
   skip_cleanup: true
