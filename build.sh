@@ -1,15 +1,15 @@
 #!/bin/sh
 set -eux
 # build user
-BUILD_USER_HOME="${BUILD_USER_HOME:-'/build'}"
-BUILD_USER_NAME="${BUILD_USER_NAME:-'build'}"
+BUILD_USER_HOME="${BUILD_USER_HOME:-/build}"
+BUILD_USER_NAME="${BUILD_USER_NAME:-build}"
 # Debian release used during build
-DEBIAN_RELEASE="${DEBIAN_RELEASE:-'stretch'}"
+DEBIAN_RELEASE="${DEBIAN_RELEASE:-stretch}"
 # Mattermost version to build
-MATTERMOST_RELEASE="${MATTERMOST_RELEASE:-'5.4.0'}"
+MATTERMOST_RELEASE="${MATTERMOST_RELEASE:-5.4.0}"
 # node key id and release
-NODE_KEY="${NODE_KEY:-'9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280'}"
-NODE_RELEASE="${NODE_RELEASE:-'10'}"
+NODE_KEY="${NODE_KEY:-9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280}"
+NODE_RELEASE="${NODE_RELEASE:-10}"
 
 if [ "$(id -u)" -eq 0 ]; then # as root user
 	# create build user, if needed
