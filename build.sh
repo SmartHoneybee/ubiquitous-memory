@@ -60,6 +60,7 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 		GOARCH="$(go env GOARCH)" \
 		GOOS="$(go env GOOS)" \
 		MATTERMOST_RELEASE="${MATTERMOST_RELEASE}" \
+		"$(command -v sh)" \
 		"${0}"
 	# salvage build artifacts
 	cp --verbose "${BUILD_USER_HOME}/mattermost-${MATTERMOST_RELEASE}-$(go env GOOS)-$(go env GOARCH).tar.gz*" .
