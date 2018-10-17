@@ -5,14 +5,8 @@ service:
   - docker
 env:
   global:
-    # used in script
-#    - BUILD_USER_HOME='/build'
-#    - BUILD_USER_NAME='build'
     - DEBIAN_RELEASE='stretch'
     - MATTERMOST_RELEASE='5.4.0'
-#    - NODE_KEY='9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280'
-#    - NODE_RELEASE='9'
-    # not used in script
     - DOCKER_PWD='/root'
     - DOCKER_IMAGE="debian:${DEBIAN_RELEASE}"
   matrix:
