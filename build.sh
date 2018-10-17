@@ -58,7 +58,7 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	su --login "${BUILD_USER_NAME}" \
 		"${0}" "${@}"
 	# salvage build artifacts
-	cp --verbose "${BUILD_USER_HOME}/mattermost-$(go env GOOS)-$(GO env GOARCH).tar.gz*" .
+	cp --verbose "${BUILD_USER_HOME}/mattermost-$(go env GOOS)-$(go env GOARCH).tar.gz*" .
 	exit 0
 fi
 # as non-root user
