@@ -15,7 +15,8 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	# create build user, if needed
 	set +e
 	if ! id -u "${BUILD_USER_NAME}"; then # create build user
-		useradd --create-home --home-dir "${BUILD_USER_HOME}" "${BUILD_USER_NAME}"
+		useradd --create-home --home-dir "${BUILD_USER_HOME}" --skel "${PWD}" \
+			"${BUILD_USER_NAME}"
 	fi
 	set -e
 	# configure apt
@@ -53,8 +54,6 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	# FIXME go (executed by build user) writes to GOROOT
 	install --directory --owner="${BUILD_USER_NAME}" \
 		"$(go env GOROOT)/pkg/$(go env GOOS)_$(go env GOARCH)"
-	# clone files into build user's home
-	git -C "${BUILD_USER_HOME}" clone "${PWD}" .
 	# switch to build user
 	su --shell "${SHELL}" --login "${BUILD_USER_NAME}" --preserve-environment \
 		"${0}" "${@}"
