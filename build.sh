@@ -1,5 +1,5 @@
 #!/bin/sh
-set -ex
+set -eux
 # build user
 BUILD_USER_HOME="${BUILD_USER_HOME:-'/build'}"
 BUILD_USER_NAME="${BUILD_USER_NAME:-'build'}"
@@ -12,9 +12,11 @@ NODE_KEY="${NODE_KEY:-'9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280'}"
 NODE_RELEASE="${NODE_RELEASE:-'10'}"
 
 if [ "$(id -u)" -eq 0 ]; then # as root user
+	set +e
 	if ! id -u "${BUILD_USER_NAME}"; then # create build user
 		useradd --create-home --home-dir "${BUILD_USER_HOME}"
 	fi
+	set -e
 	# configure apt
 	printf 'APT::Install-Recommends "0";' \
 		> '/etc/apt/apt.conf.d/99-no-install-recommends'
