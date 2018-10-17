@@ -55,7 +55,7 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	install --directory --owner="${BUILD_USER_NAME}" \
 		"$(go env GOROOT)/pkg/$(go env GOOS)_$(go env GOARCH)"
 	# switch to build user
-	runuser -u "${BUILD_USER_NAME}" -- \
+	runuser --login "${BUILD_USER_NAME}" \
 		"$(command -v env)" \
 		GOARCH="$(go env GOARCH)" \
 		GOOS="$(go env GOOS)" \
