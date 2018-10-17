@@ -53,8 +53,11 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	# clone files into build user's home
 	git -C "${BUILD_USER_HOME}" clone "${PWD}" .
 	# switch to build user
-	exec su --shell "${SHELL}" --login "${BUILD_USER_NAME}" --preserve-environment \
+	su --shell "${SHELL}" --login "${BUILD_USER_NAME}" --preserve-environment \
 		"${0}" "${@}"
+	# salvage build artifacts
+	cp --verbose "${BUILD_USER_HOME}/mattermost-$(go env GOOS)-$(GO env GOARCH).tar.gz*" .
+	exit 0
 fi
 # as non-root user
 # install yarn
