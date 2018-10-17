@@ -13,7 +13,6 @@ env:
     - GOOS='dragonfly' GOARCH='amd64'
     - GOOS='freebsd' GOARCH='amd64'
     - GOOS='freebsd' GOARCH='arm'
-    - GOOS='linux' GOARCH='amd64'
     - GOOS='linux' GOARCH='arm'
     - GOOS='linux' GOARCH='arm64'
     - GOOS='linux' GOARCH='mips'
