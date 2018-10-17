@@ -31,7 +31,7 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	apt-get install --quiet \
 		gnupg2 dirmngr apt-transport-https ca-certificates
 	# receive missing key
-	apt-key adv --keyserver 'pool.sks-keyservers.net' --recv-keys "${NODE_KEY}"
+	apt-key adv --keyserver 'hkp://pool.sks-keyservers.net' --recv-keys "${NODE_KEY}"
 	# add required additional repositories
 	printf 'deb-src http://deb.debian.org/debian %s main' "${DEBIAN_RELEASE}" \
 		> "/etc/apt/sources.list.d/${DEBIAN_RELEASE}-source.list"
