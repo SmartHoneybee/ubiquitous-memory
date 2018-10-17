@@ -55,9 +55,10 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	install --directory --owner="${BUILD_USER_NAME}" \
 		"$(go env GOROOT)/pkg/$(go env GOOS)_$(go env GOARCH)"
 	# switch to build user
-	su --login "${BUILD_USER_NAME}" env \
+	su --login "${BUILD_USER_NAME}" "$(command -v env)" \
 		GOARCH="${GOARCH}" \
 		GOOS="${GOOS}" \
+		MATTERMOST_RELEASE="${MATTERMOST_RELEASE}" \
 		"${0}" "${@}"
 	# salvage build artifacts
 	cp --verbose "${BUILD_USER_HOME}/mattermost-${MATTERMOST_RELEASE}-$(go env GOOS)-$(go env GOARCH).tar.gz*" .
