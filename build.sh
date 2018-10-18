@@ -60,7 +60,7 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	cp --verbose \
 		"${BUILD_USER_HOME}/mattermost-${MATTERMOST_RELEASE}-$(go env GOOS)-$(go env GOARCH).tar.gz" \
 		"${BUILD_USER_HOME}/mattermost-${MATTERMOST_RELEASE}-$(go env GOOS)-$(go env GOARCH).tar.gz.sha512sum" \
-		.
+		"${HOME}"
 	exit 0
 fi
 # as non-root user
