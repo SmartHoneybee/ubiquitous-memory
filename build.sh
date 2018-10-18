@@ -60,6 +60,7 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	cp --verbose "${BUILD_USER_HOME}/mattermost-${MATTERMOST_RELEASE}-$(go env GOOS)-$(go env GOARCH).tar.gz*" .
 	exit 0
 fi
+whoami
 # as non-root user
 export HOME="${BUILD_USER_HOME}" USER="${BUILD_USER_NAME}"
 # install yarn
