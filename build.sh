@@ -57,12 +57,14 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	# switch to build user
 	runuser -u "${BUILD_USER_NAME}" -- "${0}"
 	# salvage build artifacts
-	cp --verbose "${BUILD_USER_HOME}/mattermost-${MATTERMOST_RELEASE}-$(go env GOOS)-$(go env GOARCH).tar.gz*" .
+	cp --verbose \
+		"${BUILD_USER_HOME}/mattermost-${MATTERMOST_RELEASE}-$(go env GOOS)-$(go env GOARCH).tar.gz" \
+		"${BUILD_USER_HOME}/mattermost-${MATTERMOST_RELEASE}-$(go env GOOS)-$(go env GOARCH).tar.gz.sha512sum" \
+		.
 	exit 0
 fi
-cd "${HOME}"
 # as non-root user
-#export HOME="${BUILD_USER_HOME}" USER="${BUILD_USER_NAME}"
+cd "${HOME}"
 # install yarn
 npm install yarn
 # download and extract Mattermost sources
