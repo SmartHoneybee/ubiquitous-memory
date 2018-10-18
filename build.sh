@@ -61,7 +61,7 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	exit 0
 fi
 # as non-root user
-export HOME="${BUILD_USER_HOME}"
+export HOME="${BUILD_USER_HOME}" USER="${BUILD_USER_NAME}"
 # install yarn
 npm install yarn
 # download and extract Mattermost sources
