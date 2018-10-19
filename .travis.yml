@@ -31,8 +31,6 @@ before_install:
   - chmod +x build.sh
 script:
   - docker run --interactive=true --mount="type=bind,source=${PWD},destination=${DOCKER_PWD}" --rm=true --tty=true --workdir="${DOCKER_PWD}" -e DEBIAN_RELEASE -e MATTERMOST_RELEASE -e GOOS -e GOARCH "${DOCKER_IMAGE}" ./build.sh
-  - ls "${TRAVIS_BUILD_DIR}/mattermost-${MATTERMOST_RELEASE}-${GOOS}-${GOARCH}.tar.gz" "${TRAVIS_BUILD_DIR}/mattermost-${MATTERMOST_RELEASE}-${GOOS}-${GOARCH}.tar.gz.sha512sum"
-
 deploy:
   provider: releases
   api_key: "${GITHUB_OAUTH_TOKEN}"
