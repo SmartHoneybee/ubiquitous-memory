@@ -6,7 +6,7 @@ BUILD_USER_NAME="${BUILD_USER_NAME:-build}"
 # Debian release used during build
 DEBIAN_RELEASE="${DEBIAN_RELEASE:-stretch}"
 # Mattermost version to build
-MATTERMOST_RELEASE="${MATTERMOST_RELEASE:-5.4.0}"
+MATTERMOST_RELEASE="${MATTERMOST_RELEASE:-v5.4.0}"
 # node key id and release
 NODE_KEY="${NODE_KEY:-9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280}"
 NODE_RELEASE="${NODE_RELEASE:-10}"
@@ -71,7 +71,7 @@ npm install yarn
 for COMPONENT in server webapp; do
 	install --directory "${HOME}/go/src/github.com/mattermost/mattermost-${COMPONENT}"
 	wget --quiet --continue --output-document="mattermost-${COMPONENT}.tar.gz" \
-		"https://github.com/mattermost/mattermost-${COMPONENT}/archive/v${MATTERMOST_RELEASE}.tar.gz"
+		"https://github.com/mattermost/mattermost-${COMPONENT}/archive/${MATTERMOST_RELEASE}.tar.gz"
 	tar --directory="${HOME}/go/src/github.com/mattermost/mattermost-${COMPONENT}" \
 		--strip-components=1 --extract --file="mattermost-${COMPONENT}.tar.gz"
 done
