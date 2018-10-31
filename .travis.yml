@@ -6,7 +6,6 @@ service:
 env:
   global:
     - DEBIAN_RELEASE='stretch'
-    - MATTERMOST_RELEASE='5.4.0'
     - DOCKER_PWD='/root'
     - DOCKER_IMAGE="debian:${DEBIAN_RELEASE}"
   matrix:
@@ -27,6 +26,7 @@ env:
     - GOOS='openbsd' GOARCH='amd64'
     - GOOS='openbsd' GOARCH='arm'
 before_install:
+  - export MATTERMOST_RELEASE="$(grep 'version' Gopkg.toml | cut -d'"' -f2)"
   - docker pull "${DOCKER_IMAGE}"
   - chmod +x build.sh
 script:
