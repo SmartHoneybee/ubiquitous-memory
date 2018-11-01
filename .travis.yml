@@ -31,6 +31,10 @@ before_install:
   - chmod +x build.sh
 script:
   - docker run --interactive=true --mount="type=bind,source=${PWD},destination=${DOCKER_PWD}" --rm=true --tty=true --workdir="${DOCKER_PWD}" -e DEBIAN_RELEASE -e MATTERMOST_RELEASE -e GOOS -e GOARCH "${DOCKER_IMAGE}" ./build.sh
+before_deploy:
+  - git config --local user.name 'Travis CI'
+  - git config --local user.email 'travis@travis-ci.org'
+  - git tag "${MATTERMOST_RELEASE}"
 deploy:
   provider: releases
   api_key: "${GITHUB_OAUTH_TOKEN}"
