@@ -15,6 +15,7 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	# create build user, if needed
 	set +e
 	if ! id -u "${BUILD_USER_NAME}"; then # create build user
+		set -e
 		useradd --create-home --home-dir "${BUILD_USER_HOME}" --skel "${PWD}" \
 			"${BUILD_USER_NAME}"
 	fi
