@@ -34,7 +34,7 @@ script:
 before_deploy:
   - git config --local user.name 'Travis CI'
   - git config --local user.email 'travis@travis-ci.org'
-  - git tag "${MATTERMOST_RELEASE}"
+  - git tag "${MATTERMOST_RELEASE}" || true
 deploy:
   provider: releases
   api_key: "${GITHUB_OAUTH_TOKEN}"
