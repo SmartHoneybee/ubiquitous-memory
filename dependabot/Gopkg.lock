@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  digest = "1:79421244ba5848aae4b0a5c41e633a04e4894cb0b164a219dc8c15ec7facb7f1"
+  name = "github.com/blang/semver"
+  packages = ["."]
+  pruneopts = ""
+  revision = "2ee87856327ba09384cabd113bc6b5d174e9ec0f"
+  version = "v3.5.1"
+
+[[projects]]
   digest = "1:5247b135b5492aa232a731acdcb52b08f32b874cb398f21ab460396eadbe866b"
   name = "github.com/google/uuid"
   packages = ["."]
@@ -18,7 +26,7 @@
   revision = "483fb8d7c32fcb4b5636cd293a92e3935932e2f4"
 
 [[projects]]
-  digest = "1:48a3138a87e866b217088fc5777fabc71c6c71fb63d4e42ef97e5717735f2b5d"
+  digest = "1:1dd3cd1e9cee3f3851ebfe67b896a24d9a625114c2bc8d4236dabbd55f263b15"
   name = "github.com/mattermost/mattermost-server"
   packages = [
     "mlog",
@@ -27,8 +35,8 @@
     "utils/markdown",
   ]
   pruneopts = ""
-  revision = "826252252404c13bf564a8c4fd51616fc2cc4df9"
-  version = "v5.5.1"
+  revision = "0c1207215852a8726c3f09dea157d597fec368df"
+  version = "v5.6.0"
 
 [[projects]]
   digest = "1:9fa4a4a684dfb36f3ba1b0a163225140e19e3219e5576d0761d02dbd4c31b743"
