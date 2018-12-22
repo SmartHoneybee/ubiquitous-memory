@@ -92,7 +92,7 @@ make --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
 	config-reset build-linux package-linux \
 	BUILD_NUMBER="dev-$(go env GOOS)-$(go env GOARCH)-${MATTERMOST_RELEASE}" \
 	GO="GOARCH=$(go env GOARCH) GOOS=$(go env GOOS) $(command -v go)" \
-	PLUGIN_PACKAGES=''
+	PLUGIN_PACKAGES='' PLUGIN_PACKAGES_LEGACY=''
 # rename archive and calculate its SHA512 sum
 mv "${HOME}/go/src/github.com/mattermost/mattermost-server/dist/mattermost-team-linux-amd64.tar.gz" \
 	"${HOME}/mattermost-${MATTERMOST_RELEASE}-$(go env GOOS)-$(go env GOARCH).tar.gz"
