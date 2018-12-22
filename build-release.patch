@@ -20,10 +20,10 @@ index 238343e..1b7859f 100644
  	@# Make osx package
  	@# Copy binary
  ifeq ($(BUILDER_GOOS_GOARCH),"darwin_amd64")
-@@ -96,7 +96,7 @@ endif
- 	@# Cleanup
+@@ -116,7 +116,7 @@ endif
  	rm -f $(DIST_PATH)/bin/mattermost.exe
  	rm -f $(DIST_PATH)/bin/platform.exe
+ 	rm -f $(DIST_PATH)/prepackaged_plugins/*jira*
 -
 +package-linux: package
  	@# Make linux package
