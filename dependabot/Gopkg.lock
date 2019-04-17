@@ -18,6 +18,14 @@
   revision = "816b6608b3c8c1e871bc9cf777f390e2532081fe"
 
 [[projects]]
+  digest = "1:255e3d4847203dc43313d40727f336832a99170226c6136a7b943750b865528e"
+  name = "github.com/go-ldap/ldap"
+  packages = ["."]
+  pruneopts = ""
+  revision = "729c20c2694d870bcd631f0dadaecd088bd7ccbc"
+  version = "v3.0.2"
+
+[[projects]]
   digest = "1:5247b135b5492aa232a731acdcb52b08f32b874cb398f21ab460396eadbe866b"
   name = "github.com/google/uuid"
   packages = ["."]
@@ -34,19 +42,18 @@
   revision = "483fb8d7c32fcb4b5636cd293a92e3935932e2f4"
 
 [[projects]]
-  digest = "1:2302d70b2f9c61269c2479454a8ea9c25ee7d0b14e970c212daf90ea06134b53"
+  digest = "1:48b2231c64c696ec76c8d9b5b01e5bd68f30f06e447867aaae6a5bace06af8b5"
   name = "github.com/mattermost/mattermost-server"
   packages = [
     "mlog",
     "model",
     "services/timezones",
-    "utils/fileutils",
     "utils/jsonutils",
     "utils/markdown",
   ]
   pruneopts = ""
-  revision = "5ef499caae2bb751438b19151a9fcb4b27830bca"
-  version = "v5.9.0"
+  revision = "dc70ab42034da17eaf23be5a86abae81b3f1cd21"
+  version = "v5.10.0"
 
 [[projects]]
   digest = "1:9fa4a4a684dfb36f3ba1b0a163225140e19e3219e5576d0761d02dbd4c31b743"
@@ -150,6 +157,14 @@
   pruneopts = ""
   revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
   version = "v0.3.0"
+
+[[projects]]
+  digest = "1:039b95e6ba078fe5a22315dcae7bc9859226ee34672ce9ab01708576bf2abd38"
+  name = "gopkg.in/asn1-ber.v1"
+  packages = ["."]
+  pruneopts = ""
+  revision = "f715ec2f112d1e4195b827ad68cf44017a3ef2b1"
+  version = "v1.3"
 
 [[projects]]
   digest = "1:11c58e19ff7ce22740423bb933f1ddca3bf575def40d5ac3437ec12871b1648b"
