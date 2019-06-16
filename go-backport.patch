@@ -1,0 +1,27 @@
+From 556e16211ed1b4c146ca2a094688618458182ae7 Mon Sep 17 00:00:00 2001
+From: Your Name <you@example.com>
+Date: Wed, 6 Jun 2018 12:34:56 +0100
+Subject: [PATCH] go 1.11 backport
+
+---
+ store/sqlstore/channel_store.go | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/store/sqlstore/channel_store.go b/store/sqlstore/channel_store.go
+index cf63c706d..dae7c8c9c 100644
+--- a/store/sqlstore/channel_store.go
++++ b/store/sqlstore/channel_store.go
+@@ -2156,9 +2156,9 @@ func (s SqlChannelStore) SearchAllChannels(term string, opts store.ChannelSearch
+ 
+ 		likeClause, likeTerm := s.buildLIKEClause(term, "c.Name, c.DisplayName, c.Purpose")
+ 		if len(likeTerm) > 0 {
+-			likeClause = strings.ReplaceAll(likeClause, ":LikeTerm", "'"+likeTerm+"'")
++			likeClause = strings.Replace(likeClause, ":LikeTerm", "'"+likeTerm+"'", -1)
+ 			fulltextClause, fulltextTerm := s.buildFulltextClause(term, "c.Name, c.DisplayName, c.Purpose")
+-			fulltextClause = strings.ReplaceAll(fulltextClause, ":FulltextTerm", "'"+fulltextTerm+"'")
++			fulltextClause = strings.Replace(fulltextClause, ":FulltextTerm", "'"+fulltextTerm+"'", -1)
+ 			query = query.Where("(" + likeClause + " OR " + fulltextClause + ")")
+ 		}
+ 
+-- 
+2.11.0
