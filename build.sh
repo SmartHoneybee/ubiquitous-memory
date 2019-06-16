@@ -88,6 +88,8 @@ if [ "$(go env GOOS)_$(go env GOARCH)" != 'linux_amd64' ]; then
 fi
 patch --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
 	--strip=1 < "${HOME}/build-release.patch"
+patch --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
+	--strip=1 < "${HOME}/go-backport.patch"
 make --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
 	config-reset build-linux package-linux \
 	BUILD_NUMBER="dev-$(go env GOOS)-$(go env GOARCH)-${MATTERMOST_RELEASE}" \
