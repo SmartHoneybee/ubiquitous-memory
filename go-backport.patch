@@ -11,17 +11,17 @@ diff --git a/store/sqlstore/channel_store.go b/store/sqlstore/channel_store.go
 index cf63c706d..dae7c8c9c 100644
 --- a/store/sqlstore/channel_store.go
 +++ b/store/sqlstore/channel_store.go
-@@ -2156,9 +2156,9 @@ func (s SqlChannelStore) SearchAllChannels(term string, opts store.ChannelSearch
+@@ -2072,9 +2072,9 @@ func (s SqlChannelStore) SearchAllChannels(term string, opts store.ChannelSearch
  
- 		likeClause, likeTerm := s.buildLIKEClause(term, "c.Name, c.DisplayName, c.Purpose")
- 		if len(likeTerm) > 0 {
--			likeClause = strings.ReplaceAll(likeClause, ":LikeTerm", "'"+likeTerm+"'")
-+			likeClause = strings.Replace(likeClause, ":LikeTerm", "'"+likeTerm+"'", -1)
- 			fulltextClause, fulltextTerm := s.buildFulltextClause(term, "c.Name, c.DisplayName, c.Purpose")
--			fulltextClause = strings.ReplaceAll(fulltextClause, ":FulltextTerm", "'"+fulltextTerm+"'")
-+			fulltextClause = strings.Replace(fulltextClause, ":FulltextTerm", "'"+fulltextTerm+"'", -1)
- 			query = query.Where("(" + likeClause + " OR " + fulltextClause + ")")
- 		}
+ 	likeClause, likeTerm := s.buildLIKEClause(term, "c.Name, c.DisplayName, c.Purpose")
+ 	if len(likeTerm) > 0 {
+-		likeClause = strings.ReplaceAll(likeClause, ":LikeTerm", "'"+likeTerm+"'")
++		likeClause = strings.Replace(likeClause, ":LikeTerm", "'"+likeTerm+"'", -1)
+ 		fulltextClause, fulltextTerm := s.buildFulltextClause(term, "c.Name, c.DisplayName, c.Purpose")
+-		fulltextClause = strings.ReplaceAll(fulltextClause, ":FulltextTerm", "'"+fulltextTerm+"'")
++		fulltextClause = strings.Replace(fulltextClause, ":FulltextTerm", "'"+fulltextTerm+"'", -1)
+ 		query = query.Where("(" + likeClause + " OR " + fulltextClause + ")")
+ 	}
  
 -- 
 2.11.0
