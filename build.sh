@@ -66,8 +66,6 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 fi
 # as non-root user
 cd "${HOME}"
-# install yarn
-npm install yarn
 # download and extract Mattermost sources
 for COMPONENT in server webapp; do
 	install --directory "${HOME}/go/src/github.com/mattermost/mattermost-${COMPONENT}"
@@ -77,6 +75,8 @@ for COMPONENT in server webapp; do
 		--strip-components=1 --extract --file="mattermost-${COMPONENT}.tar.gz"
 done
 # build Mattermost webapp
+sed -i -e 's#--verbose#--display minimal#' \
+	"${HOME}/go/src/github.com/mattermost/mattermost-webapp/package.json"
 make --directory="${HOME}/go/src/github.com/mattermost/mattermost-webapp" \
 	build
 # build Mattermost server
