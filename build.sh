@@ -75,6 +75,7 @@ for COMPONENT in server webapp; do
 		--strip-components=1 --extract --file="mattermost-${COMPONENT}.tar.gz"
 done
 # build Mattermost webapp
+npm set progress false
 sed -i -e 's#--verbose#--display minimal#' \
 	"${HOME}/go/src/github.com/mattermost/mattermost-webapp/package.json"
 make --directory="${HOME}/go/src/github.com/mattermost/mattermost-webapp" \
