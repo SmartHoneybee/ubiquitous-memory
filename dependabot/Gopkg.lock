@@ -18,14 +18,6 @@
   revision = "816b6608b3c8c1e871bc9cf777f390e2532081fe"
 
 [[projects]]
-  digest = "1:255e3d4847203dc43313d40727f336832a99170226c6136a7b943750b865528e"
-  name = "github.com/go-ldap/ldap"
-  packages = ["."]
-  pruneopts = ""
-  revision = "729c20c2694d870bcd631f0dadaecd088bd7ccbc"
-  version = "v3.0.2"
-
-[[projects]]
   digest = "1:5247b135b5492aa232a731acdcb52b08f32b874cb398f21ab460396eadbe866b"
   name = "github.com/google/uuid"
   packages = ["."]
@@ -50,7 +42,15 @@
   version = "v1.10.0"
 
 [[projects]]
-  digest = "1:3101b3fac6092ae63a4dee90fba080d7e08f8546d0985b6cc9d277cdf23c3fe8"
+  digest = "1:e2df3d086086eadfe8ef94d8f1f333d75b5332987b4c6116f5df8d6bf2a69417"
+  name = "github.com/mattermost/ldap"
+  packages = ["."]
+  pruneopts = ""
+  revision = "fee0a369f21be68ea3d647c0da8272a352fa1528"
+  version = "v3.0.4"
+
+[[projects]]
+  digest = "1:30a230c4267e321c3a0a725104f5c67a834745e9508d7210eef123d02a43fa88"
   name = "github.com/mattermost/mattermost-server"
   packages = [
     "mlog",
@@ -60,8 +60,8 @@
     "utils/markdown",
   ]
   pruneopts = ""
-  revision = "817ee89711bf26d33f840ce7f59fba14da1ed168"
-  version = "v5.14.2"
+  revision = "f4f7fd0829d74fcd5e290fd1ba76845af18e553e"
+  version = "v5.15.0"
 
 [[projects]]
   digest = "1:9fa4a4a684dfb36f3ba1b0a163225140e19e3219e5576d0761d02dbd4c31b743"
