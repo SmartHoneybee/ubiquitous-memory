@@ -93,6 +93,7 @@ patch --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
 	--strip=1 < "${HOME}/go-backport.patch"
 sed -i \
 	-e 's#go generate#env --unset=GOOS --unset=GOARCH &#' \
+	-e 's#$(GO) generate#env --unset=GOOS --unset=GOARCH &#' \
 	-e 's#PWD#CURDIR#' \
 	"${HOME}/go/src/github.com/mattermost/mattermost-server/Makefile" \
 	"${HOME}/go/src/github.com/mattermost/mattermost-server/build/release.mk"
