@@ -98,6 +98,7 @@ sed -i \
 	-e 's#PWD#CURDIR#' \
 	"${HOME}/go/src/github.com/mattermost/mattermost-server/Makefile" \
 	"${HOME}/go/src/github.com/mattermost/mattermost-server/build/release.mk"
+sed -i -e '107d' "${HOME}/go/src/github.com/mattermost/mattermost-server/go.mod" # invalid pseudo-version: does not match version-control timestamp
 make --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
 	config-reset build-linux package-linux \
 	BUILD_NUMBER="dev-$(go env GOOS)-$(go env GOARCH)-${MATTERMOST_RELEASE}" \
