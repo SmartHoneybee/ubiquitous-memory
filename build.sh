@@ -35,17 +35,20 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	# receive missing key (retry on failure)
 	parallel --verbose --delay=30 --retries=5 "apt-key adv --keyserver 'ipv4.pool.sks-keyservers.net' --recv-keys '{}'" ::: "${NODE_KEY}"
 	# add required additional repositories
-	printf 'deb-src http://deb.debian.org/debian %s main' "${DEBIAN_RELEASE}" \
-		> "/etc/apt/sources.list.d/${DEBIAN_RELEASE}-source.list"
-	printf 'deb http://deb.debian.org/debian %s-backports main' "${DEBIAN_RELEASE}" \
-		> "/etc/apt/sources.list.d/${DEBIAN_RELEASE}-backports.list"
+	printf 'deb-src http://deb.debian.org/debian %s main\n' "${DEBIAN_RELEASE}" 'testing' \
+		> "/etc/apt/sources.list.d/source.list"
 	printf 'deb https://deb.nodesource.com/node_%s.x %s main' "${NODE_RELEASE}" "${DEBIAN_RELEASE}" \
 		> '/etc/apt/sources.list.d/nodesource.list'
 	# update repositories
 	apt-get update
-	# install go from Debian backports
-	apt-get install --quiet --target-release "${DEBIAN_RELEASE}-backports" \
-		golang-go
+	# install go from testing sources; FIXME use backports https://bugs.debian.org/943399
+	_gov="1.13"
+	export DEB_BUILD_OPTIONS="nocheck nodoc parallel=$(nproc) terse"
+	apt-get build-dep "golang-${_gov}-go/testing"
+	apt-get source --compile "golang-${_gov}-go/testing"
+	apt-get install --quiet \
+		"${PWD}/golang-${_gov}"*".deb"
+	ln --symbolic --force  "/usr/lib/go-${_gov}/bin/go" /usr/bin/go # FIXME ugly
 	# install dependencies
 	apt-get install --quiet \
 		wget build-essential patch git nodejs
@@ -89,14 +92,13 @@ if [ "$(go env GOOS)_$(go env GOARCH)" != 'linux_amd64' ]; then
 fi
 patch --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
 	--strip=1 < "${HOME}/build-release.patch"
-patch --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
-	--strip=1 < "${HOME}/go-backport.patch"
 sed -i \
 	-e 's#go generate#env --unset=GOOS --unset=GOARCH go generate#' \
 	-e 's#$(GO) generate#env --unset=GOOS --unset=GOARCH go generate#' \
 	-e 's#PWD#CURDIR#' \
 	"${HOME}/go/src/github.com/mattermost/mattermost-server/Makefile" \
 	"${HOME}/go/src/github.com/mattermost/mattermost-server/build/release.mk"
+sed -i -e '107d' "${HOME}/go/src/github.com/mattermost/mattermost-server/go.mod" # invalid pseudo-version: does not match version-control timestamp
 make --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
 	config-reset build-linux package-linux \
 	BUILD_NUMBER="dev-$(go env GOOS)-$(go env GOARCH)-${MATTERMOST_RELEASE}" \
