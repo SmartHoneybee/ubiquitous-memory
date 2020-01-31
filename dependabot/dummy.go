@@ -1,3 +1,3 @@
 package main
 import _ "github.com/mattermost/mattermost-server/model"
-func() main() {/* dummy file */}
+func main() {/* dummy file */}
