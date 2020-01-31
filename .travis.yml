@@ -1,7 +1,7 @@
 language: c
-dist: trusty
-sudo: required
-service:
+os: linux
+dist: bionic
+services:
   - docker
 env:
   global:
