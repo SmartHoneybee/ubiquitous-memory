@@ -34,7 +34,7 @@ index 238343e..1b7859f 100644
  	cp $(GOPATH)/bin/linux_amd64/platform $(DIST_PATH)/bin # from cross-compiled bin dir
  endif
 -	MMCTL_FILE="linux_amd64.tar" && curl -f -O -L https://github.com/mattermost/mmctl/releases/download/$(MMCTL_REL_TO_DOWNLOAD)/$$MMCTL_FILE && tar -xvf $$MMCTL_FILE -C $(DIST_PATH)/bin && rm $$MMCTL_FILE
-+	$(GO) get -u github.com/mattermost/mmctl && cp $(GOPATH)/bin/linux_amd64/mmctl $(DIST_PATH)/bin
++
  	@# Prepackage plugins
  	@for plugin_package in $(PLUGIN_PACKAGES) ; do \
  		ARCH="linux-amd64"; \
