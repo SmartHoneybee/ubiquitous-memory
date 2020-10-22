@@ -1,5 +1,14 @@
+From 556e16211ed1b4c146ca2a094688618458182ae7 Mon Sep 17 00:00:00 2001
+From: Your Name <you@example.com>
+Date: Wed, 6 Jun 2018 12:34:56 +0100
+Subject: [PATCH] Split make goal
+
+---
+ build/release.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
 diff --git a/build/release.mk b/build/release.mk
-index 4d37fc2e86..db412411c7 100644
+index 238343e..1b7859f 100644
 --- a/build/release.mk
 +++ b/build/release.mk
 @@ -97,9 +97,6 @@ package:
@@ -39,3 +48,5 @@ index 4d37fc2e86..db412411c7 100644
  	@# Prepackage plugins
  	@for plugin_package in $(PLUGIN_PACKAGES) ; do \
  		ARCH="linux-amd64"; \
+-- 
+2.11.0
