@@ -26,7 +26,7 @@ index 4d37fc2e86..db412411c7 100644
  	rm -f $(DIST_PATH)/bin/mmctl.exe
  	rm -f $(DIST_PATH)/prepackaged_plugins/*
 -
-+package-linux:
++package-linux: package
  	@# Make linux package
  	@# Copy binary
  ifeq ($(BUILDER_GOOS_GOARCH),"linux_amd64")
