@@ -88,7 +88,7 @@ if [ "$(go env GOOS)_$(go env GOARCH)" != 'linux_amd64' ]; then
 		"${HOME}/go/bin/linux_amd64"
 fi
 patch --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
-	--strip=1 < "${HOME}/build-release.patch"
+	--strip=1 -t < "${HOME}/build-release.patch"
 sed -i \
 	-e 's#go generate#env --unset=GOOS --unset=GOARCH go generate#' \
 	-e 's#$(GO) generate#env --unset=GOOS --unset=GOARCH go generate#' \
