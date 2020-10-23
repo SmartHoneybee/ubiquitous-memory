@@ -1,3 +1,3 @@
 module github.com/SmartHoneybee/ubiquitous-memory/dependabot
 
-require github.com/mattermost/mattermost-server/v5 v5.27.0
+require github.com/mattermost/mattermost-server/v5 v5.28.1
