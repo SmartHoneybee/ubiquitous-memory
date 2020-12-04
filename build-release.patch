@@ -1,7 +1,16 @@
 diff --git a/build/release.mk b/build/release.mk
-index efc5c1f5c6..b4ecc0ae20 100644
+index efc5c1f5c6..8793b1cb4f 100644
 --- a/build/release.mk
 +++ b/build/release.mk
+@@ -97,7 +97,7 @@ package:
+ 	cp -RL $(BUILD_WEBAPP_DIR)/dist/* $(DIST_PATH)/client
+ 
+ 	@#Download MMCTL
+-	scripts/download_mmctl_release.sh "" $(DIST_PATH)/bin
++	#scripts/download_mmctl_release.sh "" $(DIST_PATH)/bin
+ 
+ 	@# Help files
+ ifeq ($(BUILD_ENTERPRISE_READY),true)
 @@ -125,7 +125,7 @@ endif
  
  
