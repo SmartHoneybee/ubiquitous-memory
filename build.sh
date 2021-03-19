@@ -10,6 +10,8 @@ MATTERMOST_RELEASE="${MATTERMOST_RELEASE:-v5.4.0}"
 # node key id and release
 NODE_KEY="${NODE_KEY:-9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280}"
 NODE_RELEASE="${NODE_RELEASE:-10}"
+# golang version
+GO_VERSION="${GO_VERSION:-1.15.5}"
 
 if [ "$(id -u)" -eq 0 ]; then # as root user
 	# create build user, if needed
@@ -43,15 +45,18 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 		> '/etc/apt/sources.list.d/nodesource.list'
 	# update repositories
 	apt-get update
-	# install go from Debian backports
-	apt-get install --quiet --target-release "${DEBIAN_RELEASE}-backports" \
-		golang-go
 	# install dependencies
 	apt-get install --quiet \
 		wget build-essential patch git nodejs
 	# install 'pngquant' build dependencies (required by node module)
 	apt-get build-dep --quiet \
 		pngquant
+	# install go from golang.org
+	wget https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz
+	tar -xvf go${GO_VERSION}.linux-amd64.tar.gz
+	mv go /usr/local
+	export GOROOT=/usr/local/go
+	export PATH=$GOROOT/bin:$PATH
 	# FIXME go (executed by build user) writes to GOROOT
 	install --directory --owner="${BUILD_USER_NAME}" \
 		"$(go env GOROOT)/pkg/$(go env GOOS)_$(go env GOARCH)"
@@ -65,6 +70,8 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	exit 0
 fi
 # as non-root user
+export GOROOT=/usr/local/go
+export PATH=$GOROOT/bin:$PATH
 cd "${HOME}"
 # download and extract Mattermost sources
 for COMPONENT in server webapp; do
