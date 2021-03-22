@@ -3,8 +3,8 @@ set -eux
 # build user
 BUILD_USER_HOME="${BUILD_USER_HOME:-/build}"
 BUILD_USER_NAME="${BUILD_USER_NAME:-build}"
-# Debian release used during build
-DEBIAN_RELEASE="${DEBIAN_RELEASE:-stretch}"
+# Ubuntu release used during build
+UBUNTU_RELEASE="${UBUNTU_RELEASE:-groovy}"
 # Mattermost version to build
 MATTERMOST_RELEASE="${MATTERMOST_RELEASE:-v5.4.0}"
 # node key id and release
@@ -35,23 +35,20 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	# receive missing key (retry on failure)
 	parallel --verbose --delay=30 --retries=5 "apt-key adv --keyserver 'ipv4.pool.sks-keyservers.net' --recv-keys '{}'" ::: "${NODE_KEY}"
 	# add required additional repositories
-	printf 'deb-src http://deb.debian.org/debian %s main' "${DEBIAN_RELEASE}" \
-		> "/etc/apt/sources.list.d/${DEBIAN_RELEASE}-source.list"
-	printf 'deb http://deb.debian.org/debian %s-backports main' "${DEBIAN_RELEASE}" \
-		> "/etc/apt/sources.list.d/${DEBIAN_RELEASE}-backports.list"
-	printf 'deb https://deb.nodesource.com/node_%s.x %s main' "${NODE_RELEASE}" "${DEBIAN_RELEASE}" \
-		> '/etc/apt/sources.list.d/nodesource.list'
+	#printf 'deb-src http://deb.debian.org/debian %s main' "${DEBIAN_RELEASE}" \
+	#	> "/etc/apt/sources.list.d/${DEBIAN_RELEASE}-source.list"
+	#printf 'deb http://deb.debian.org/debian %s-backports main' "${DEBIAN_RELEASE}" \
+	#	> "/etc/apt/sources.list.d/${DEBIAN_RELEASE}-backports.list"
+	#printf 'deb https://deb.nodesource.com/node_%s.x %s main' "${NODE_RELEASE}" "${DEBIAN_RELEASE}" \
+	#	> '/etc/apt/sources.list.d/nodesource.list'
 	# update repositories
 	apt-get update
-	# install go from Debian backports
-	apt-get install --quiet --target-release "${DEBIAN_RELEASE}-backports" \
-		golang-go
+	# install go
+	apt-get install --quiet \
+		golang-1.15
 	# install dependencies
 	apt-get install --quiet \
-		wget build-essential patch git nodejs
-	# install 'pngquant' build dependencies (required by node module)
-	apt-get build-dep --quiet \
-		pngquant
+		wget build-essential patch git nodejs pngquant
 	# FIXME go (executed by build user) writes to GOROOT
 	install --directory --owner="${BUILD_USER_NAME}" \
 		"$(go env GOROOT)/pkg/$(go env GOOS)_$(go env GOARCH)"

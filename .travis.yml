@@ -6,8 +6,9 @@ services:
 env:
   global:
     - DEBIAN_RELEASE='buster'
+    - UBUNTU_RELEASE='groovy'
     - DOCKER_PWD='/root'
-    - DOCKER_IMAGE="debian:${DEBIAN_RELEASE}"
+    - DOCKER_IMAGE="ubuntu:${UBUNTU_RELEASE}"
   matrix:
     - GOOS='dragonfly' GOARCH='amd64'
     - GOOS='freebsd' GOARCH='amd64'
@@ -30,7 +31,7 @@ before_install:
   - docker pull "${DOCKER_IMAGE}"
   - chmod +x build.sh
 script:
-  - docker run --interactive=true --mount="type=bind,source=${PWD},destination=${DOCKER_PWD}" --rm=true --tty=true --workdir="${DOCKER_PWD}" -e DEBIAN_RELEASE -e MATTERMOST_RELEASE -e GOOS -e GOARCH "${DOCKER_IMAGE}" ./build.sh
+  - docker run --interactive=true --mount="type=bind,source=${PWD},destination=${DOCKER_PWD}" --rm=true --tty=true --workdir="${DOCKER_PWD}" -e UBUNTU_RELEASE -e MATTERMOST_RELEASE -e GOOS -e GOARCH "${DOCKER_IMAGE}" ./build.sh
 before_deploy:
   - git config --local user.name 'Travis CI'
   - git config --local user.email 'travis@travis-ci.org'
