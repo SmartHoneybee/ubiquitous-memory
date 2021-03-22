@@ -48,7 +48,7 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 		golang-1.15
 	# install dependencies
 	apt-get install --quiet \
-		wget build-essential patch git nodejs npm pngquant
+		wget build-essential patch autoconf git nodejs npm pngquant
 	# FIXME go (executed by build user) writes to GOROOT
 	install --directory --owner="${BUILD_USER_NAME}" \
 		"$(go env GOROOT)/pkg/$(go env GOOS)_$(go env GOARCH)"
