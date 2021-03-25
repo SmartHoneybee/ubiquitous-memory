@@ -12,7 +12,7 @@ env:
   matrix:
     - GOOS='dragonfly' GOARCH='amd64'
     - GOOS='freebsd' GOARCH='amd64'
-    #- GOOS='freebsd' GOARCH='arm'
+    - GOOS='freebsd' GOARCH='arm'
     - GOOS='linux' GOARCH='arm'
     - GOOS='linux' GOARCH='arm64'
     - GOOS='linux' GOARCH='mips'
@@ -22,10 +22,10 @@ env:
     - GOOS='linux' GOARCH='ppc64'
     - GOOS='linux' GOARCH='ppc64le'
     - GOOS='linux' GOARCH='s390x'
-    #- GOOS='netbsd' GOARCH='amd64'
-    #- GOOS='netbsd' GOARCH='arm'
-    #- GOOS='openbsd' GOARCH='amd64'
-    #- GOOS='openbsd' GOARCH='arm'
+    - GOOS='netbsd' GOARCH='amd64'
+    - GOOS='netbsd' GOARCH='arm'
+    - GOOS='openbsd' GOARCH='amd64'
+    - GOOS='openbsd' GOARCH='arm'
 before_install:
   - export MATTERMOST_RELEASE="$(grep 'mattermost' dependabot/go.mod | cut -d' ' -f3)"
   - docker pull "${DOCKER_IMAGE}"
