@@ -1,0 +1,122 @@
+name: Package and release
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  DEBIAN_RELEASE: buster
+  DOCKER_PWD: /root
+  DOCKER_IMAGE: debian:${DEBIAN_RELEASE}
+  GO_VERSION: 1.15.5
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [dragonfly, freebsd, linux, netbsd, openbsd]
+        arch: [amd64, arm, arm64, mips, mips64, mips64le, ppc64, ppc64le, s390x ]
+        exclude:
+          - os: dragonfly
+            arch: arm
+          - os: dragonfly
+            arch: arm64
+          - os: dragonfly
+            arch: mips
+          - os: dragonfly
+            arch: mips64
+          - os: dragonfly
+            arch: mips64le
+          - os: dragonfly
+            arch: ppc64
+          - os: dragonfly
+            arch: ppc64le
+          - os: dragonfly
+            arch: s390x
+          - os: freebsd
+            arch: arm64
+          - os: freebsd
+            arch: mips
+          - os: freebsd
+            arch: mips64
+          - os: freebsd
+            arch: mips64le
+          - os: freebsd
+            arch: ppc64
+          - os: freebsd
+            arch: ppc64le
+          - os: freebsd
+            arch: s390x
+          - os: netbsd
+            arch: arm64
+          - os: netbsd
+            arch: mips
+          - os: netbsd
+            arch: mips64
+          - os: netbsd
+            arch: mips64le
+          - os: netbsd
+            arch: ppc64
+          - os: netbsd
+            arch: ppc64le
+          - os: netbsd
+            arch: s390x
+          - os: openbsd
+            arch: arm64
+          - os: openbsd
+            arch: mips
+          - os: openbsd
+            arch: mips64
+          - os: openbsd
+            arch: mips64le
+          - os: openbsd
+            arch: ppc64
+          - os: openbsd
+            arch: ppc64le
+          - os: openbsd
+            arch: s390x
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Set environment from runtime properties
+        run: echo "MATTERMOST_RELEASE=$(grep 'mattermost' dependabot/go.mod | cut -d' ' -f3)" >> $GITHUB_ENV
+
+      - name: Pull docker image
+        run: 'docker pull "${{ env.DOCKER_IMAGE }}"'
+
+      - name: Build
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+        run: docker run --mount="type=bind,source=$PWD,destination=${{ env.DOCKER_PWD }}" --rm=true --tty=true --workdir="${{ env.DOCKER_PWD }}" -e DEBIAN_RELEASE -e MATTERMOST_RELEASE -e GOOS -e GOARCH "${{ env.DOCKER_IMAGE }}" ./build.sh
+
+      - name: Tag release
+        if: github.ref == 'refs/heads/master'
+        uses: actions/github-script@v3
+        # this throws an error if the tag already exists. can't find a way around that without writing our own Github REST client or forking github's scripts repo.
+        # would prefer to do this before any of these jobs run, but we need to know the mattermost version which only happens after a clone. could potentially
+        # setup a separate job which does clone + tag, but felt like this was "good enough" for now.
+        continue-on-error: true
+        with:
+          script: |
+            github.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ env.MATTERMOST_RELEASE }}',
+              sha: context.sha
+            })
+
+      - name: Create Github release
+        if: github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.MATTERMOST_RELEASE }}
+          files: |
+            mattermost-${{ env.MATTERMOST_RELEASE }}-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
+            mattermost-${{ env.MATTERMOST_RELEASE }}-${{ matrix.os }}-${{ matrix.arch }}.tar.gz.sha512sum
