@@ -105,7 +105,7 @@ sed -i \
 make --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
 	config-reset \
 	BUILD_NUMBER="dev-$(go env GOOS)-$(go env GOARCH)-${MATTERMOST_RELEASE}" \
-	GO="$(command -v go)" \
+	GO="GOARCH= GOOS= $(command -v go)" \
 	PLUGIN_PACKAGES=''
 make --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
 	build-linux package-linux \

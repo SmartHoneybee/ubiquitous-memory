@@ -1,8 +1,17 @@
 diff --git a/build/release.mk b/build/release.mk
-index 3e9a11339..c8bd5409f 100644
+index 1530e75c6..befe5c9b7 100644
 --- a/build/release.mk
 +++ b/build/release.mk
-@@ -97,7 +97,7 @@ package:
+@@ -76,7 +76,7 @@ package:
+ 	@# Resource directories
+ 	mkdir -p $(DIST_PATH)/config
+ 	cp -L config/README.md $(DIST_PATH)/config
+-	OUTPUT_CONFIG=$(PWD)/$(DIST_PATH)/config/config.json go run ./scripts/config_generator
++	OUTPUT_CONFIG=$(PWD)/$(DIST_PATH)/config/config.json GOOS= GOARCH= go run ./scripts/config_generator
+ 	cp -RL fonts $(DIST_PATH)
+ 	cp -RL templates $(DIST_PATH)
+ 	rm -rf $(DIST_PATH)/templates/*.mjml $(DIST_PATH)/templates/partials/
+@@ -98,7 +98,7 @@ package:
  	cp -RL $(BUILD_WEBAPP_DIR)/dist/* $(DIST_PATH)/client
  
  	@#Download MMCTL
@@ -11,7 +20,7 @@ index 3e9a11339..c8bd5409f 100644
  
  	@# Help files
  ifeq ($(BUILD_ENTERPRISE_READY),true)
-@@ -126,7 +126,7 @@ endif
+@@ -127,7 +127,7 @@ endif
  
  
  	@# ----- PLATFORM SPECIFIC -----
@@ -20,7 +29,7 @@ index 3e9a11339..c8bd5409f 100644
  	@# Make osx package
  	@# Copy binary
  ifeq ($(BUILDER_GOOS_GOARCH),"darwin_amd64")
-@@ -196,7 +196,7 @@ endif
+@@ -197,7 +197,7 @@ endif
  	rm -f $(DIST_PATH)/bin/platform.exe
  	rm -f $(DIST_PATH)/bin/mmctl.exe
  	rm -f $(DIST_PATH)/prepackaged_plugins/*
@@ -29,7 +38,7 @@ index 3e9a11339..c8bd5409f 100644
  	@# Make linux package
  	@# Copy binary
  ifeq ($(BUILDER_GOOS_GOARCH),"linux_amd64")
-@@ -207,7 +207,7 @@ else
+@@ -208,7 +208,7 @@ else
  	cp $(GOBIN)/linux_amd64/platform $(DIST_PATH)/bin # from cross-compiled bin dir
  endif
  	#Download MMCTL for Linux
