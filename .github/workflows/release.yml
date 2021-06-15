@@ -16,67 +16,39 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [dragonfly, freebsd, linux, netbsd, openbsd]
-        arch: [amd64, arm, arm64, mips, mips64, mips64le, ppc64, ppc64le, s390x ]
-        exclude:
+        include:
           - os: dragonfly
+            arch: amd64
+          - os: freebsd
+            arch: amd64
+          - os: freebsd
             arch: arm
-          - os: dragonfly
+          - os: linux
+            arch: arm
+          - os: linux
             arch: arm64
-          - os: dragonfly
+          - os: linux
             arch: mips
-          - os: dragonfly
+          - os: linux
             arch: mips64
-          - os: dragonfly
+          - os: linux
             arch: mips64le
-          - os: dragonfly
+          - os: linux
+            arch: mipsle
+          - os: linux
             arch: ppc64
-          - os: dragonfly
+          - os: linux
             arch: ppc64le
-          - os: dragonfly
-            arch: s390x
-          - os: freebsd
-            arch: arm64
-          - os: freebsd
-            arch: mips
-          - os: freebsd
-            arch: mips64
-          - os: freebsd
-            arch: mips64le
-          - os: freebsd
-            arch: ppc64
-          - os: freebsd
-            arch: ppc64le
-          - os: freebsd
+          - os: linux
             arch: s390x
           - os: netbsd
-            arch: arm64
+            arch: amd64
           - os: netbsd
-            arch: mips
-          - os: netbsd
-            arch: mips64
-          - os: netbsd
-            arch: mips64le
-          - os: netbsd
-            arch: ppc64
-          - os: netbsd
-            arch: ppc64le
-          - os: netbsd
-            arch: s390x
+            arch: arm
           - os: openbsd
-            arch: arm64
+            arch: amd64
           - os: openbsd
-            arch: mips
-          - os: openbsd
-            arch: mips64
-          - os: openbsd
-            arch: mips64le
-          - os: openbsd
-            arch: ppc64
-          - os: openbsd
-            arch: ppc64le
-          - os: openbsd
-            arch: s390x
+            arch: arm
 
     steps:
       - name: Clone repository
