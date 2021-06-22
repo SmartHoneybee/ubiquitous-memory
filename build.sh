@@ -33,7 +33,7 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	apt-get update
 	# dependencies to setup repositories
 	apt-get install --quiet \
-		gnupg2 dirmngr apt-transport-https ca-certificates
+		gnupg2 dirmngr apt-transport-https ca-certificates curl
 	# receive missing key
 	curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 	# add required additional repositories
