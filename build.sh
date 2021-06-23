@@ -33,9 +33,9 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	apt-get update
 	# dependencies to setup repositories
 	apt-get install --quiet \
-		gnupg2 dirmngr apt-transport-https ca-certificates parallel
-	# receive missing key (retry on failure)
-	parallel --verbose --delay=30 --retries=5 "apt-key adv --keyserver 'ipv4.pool.sks-keyservers.net' --recv-keys '{}'" ::: "${NODE_KEY}"
+		gnupg2 dirmngr apt-transport-https ca-certificates curl
+	# receive missing key
+	curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 	# add required additional repositories
 	printf 'deb-src http://deb.debian.org/debian %s main' "${DEBIAN_RELEASE}" \
 		> "/etc/apt/sources.list.d/${DEBIAN_RELEASE}-source.list"
