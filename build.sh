@@ -11,7 +11,7 @@ MATTERMOST_RELEASE="${MATTERMOST_RELEASE:-v5.4.0}"
 NODE_KEY="${NODE_KEY:-9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280}"
 NODE_RELEASE="${NODE_RELEASE:-10}"
 # golang version
-GO_VERSION="${GO_VERSION:-1.16}"
+GO_VERSION="${GO_VERSION:-1.16.7}"
 
 if [ "$(id -u)" -eq 0 ]; then # as root user
 	# create build user, if needed
