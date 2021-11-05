@@ -55,7 +55,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set environment from runtime properties
-        run: echo "MATTERMOST_RELEASE=$(grep 'mattermost' dependabot/go.mod | cut -d' ' -f3)" >> $GITHUB_ENV
+        run: |
+          echo "MATTERMOST_RELEASE=$(grep 'mattermost-server' dependabot/go.mod | cut -d' ' -f3)" >> $GITHUB_ENV
+          echo "MMCTL_RELEASE=$(grep 'mmctl' dependabot/go.mod | cut -d' ' -f3)" >> $GITHUB_ENV
 
       - name: Pull docker image
         run: 'docker pull "${{ env.DOCKER_IMAGE }}"'
@@ -64,7 +66,7 @@ jobs:
         env:
           GOOS: ${{ matrix.os }}
           GOARCH: ${{ matrix.arch }}
-        run: docker run --mount="type=bind,source=$PWD,destination=${{ env.DOCKER_PWD }}" --rm=true --tty=true --workdir="${{ env.DOCKER_PWD }}" -e DEBIAN_RELEASE -e MATTERMOST_RELEASE -e GOOS -e GOARCH "${{ env.DOCKER_IMAGE }}" ./build.sh
+        run: docker run --mount="type=bind,source=$PWD,destination=${{ env.DOCKER_PWD }}" --rm=true --tty=true --workdir="${{ env.DOCKER_PWD }}" -e DEBIAN_RELEASE -e MATTERMOST_RELEASE -e MMCTL_RELEASE -e GOOS -e GOARCH "${{ env.DOCKER_IMAGE }}" ./build.sh
 
       - name: Tag release
         if: github.ref == 'refs/heads/master'
