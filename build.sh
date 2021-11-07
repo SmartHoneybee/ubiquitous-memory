@@ -61,7 +61,7 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	# FIXME go (executed by build user) writes to GOROOT
 	install --directory --owner="${BUILD_USER_NAME}" \
 		"$(go env GOROOT)/pkg/$(go env GOOS)_$(go env GOARCH)"
-	# switch to build user
+	# Re-invoke this build.sh script with the 'build' user
 	runuser -u "${BUILD_USER_NAME}" -- "${0}"
 	# salvage build artifacts
 	cp --verbose \
@@ -82,6 +82,23 @@ for COMPONENT in server webapp; do
 	tar --directory="${HOME}/go/src/github.com/mattermost/mattermost-${COMPONENT}" \
 		--strip-components=1 --extract --file="mattermost-${COMPONENT}.tar.gz"
 done
+# prepare the go build environment
+install --directory "${HOME}/go/bin"
+if [ "$(go env GOOS)_$(go env GOARCH)" != 'linux_amd64' ]; then
+	ln --symbolic \
+		"${HOME}/go/bin/$(go env GOOS)_$(go env GOARCH)" \
+		"${HOME}/go/bin/linux_amd64"
+fi
+# build mmctl
+install --directory "${HOME}/go/src/github.com/mattermost/mmctl"
+wget --quiet --continue --output-document="mmctl.tar.gz" \
+	"https://github.com/mattermost/mmctl/archive/${MMCTL_RELEASE}.tar.gz"
+tar --directory="${HOME}/go/src/github.com/mattermost/mmctl" \
+	--strip-components=1 --extract --file="mmctl.tar.gz"
+make --directory="${HOME}/go/src/github.com/mattermost/mmctl" \
+	BUILD_NUMBER="dev-$(go env GOOS)-$(go env GOARCH)-${MMCTL_RELEASE}" \
+	ADVANCED_VET=0 \
+	GO="GOARCH= GOOS= $(command -v go)"
 # build Mattermost webapp
 npm set progress false
 sed -i -e 's#--verbose#--display minimal#' \
@@ -89,12 +106,6 @@ sed -i -e 's#--verbose#--display minimal#' \
 make --directory="${HOME}/go/src/github.com/mattermost/mattermost-webapp" \
 	build
 # build Mattermost server
-install --directory "${HOME}/go/bin"
-if [ "$(go env GOOS)_$(go env GOARCH)" != 'linux_amd64' ]; then
-	ln --symbolic \
-		"${HOME}/go/bin/$(go env GOOS)_$(go env GOARCH)" \
-		"${HOME}/go/bin/linux_amd64"
-fi
 patch --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
 	--strip=1 -t < "${HOME}/build-release.patch"
 sed -i \
