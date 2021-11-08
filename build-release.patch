@@ -16,7 +16,7 @@ index 7f989d4b4..886119275 100644
  endif
  	#Download MMCTL for Linux
 -	scripts/download_mmctl_release.sh "Linux" $(DIST_PATH_LIN)/bin
-+	#scripts/download_mmctl_release.sh "Linux" $(DIST_PATH_LIN)/bin
++	cp "${HOME}/go/src/github.com/mattermost/mmctl/mmctl" $(DIST_PATH_LIN)/bin
  	@# Prepackage plugins
  	@for plugin_package in $(PLUGIN_PACKAGES) ; do \
  		ARCH="linux-amd64"; \
