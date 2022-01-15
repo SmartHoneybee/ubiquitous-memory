@@ -56,7 +56,7 @@ jobs:
 
       - name: Set environment from runtime properties
         run: |
-          echo "MATTERMOST_RELEASE=$(grep 'mattermost-server' dependabot/go.mod | cut -d' ' -f3)" >> $GITHUB_ENV
+          echo "MATTERMOST_RELEASE=$(grep 'mattermost-server' dependabot/go.mod | cut -d' ' -f2)" >> $GITHUB_ENV
           echo "MMCTL_RELEASE=$MATTERMOST_RELEASE" >> $GITHUB_ENV
 
       - name: Pull docker image
