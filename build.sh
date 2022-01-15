@@ -10,7 +10,7 @@ MATTERMOST_RELEASE="${MATTERMOST_RELEASE:-v5.26.0}"
 MMCTL_RELEASE="${MMCTL_RELEASE:-v5.26.0}"
 # node key id and release
 NODE_KEY="${NODE_KEY:-9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280}"
-NODE_RELEASE="${NODE_RELEASE:-16}"
+NODE_RELEASE="${NODE_RELEASE:-15}"
 # golang version
 GO_VERSION="${GO_VERSION:-1.16.7}"
 
@@ -48,7 +48,7 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	apt-get update
 	# install dependencies
 	apt-get install --quiet \
-		wget build-essential patch git nodejs
+		wget build-essential patch git nodejs python2
 	# install 'pngquant' build dependencies (required by node module)
 	apt-get build-dep --quiet \
 		pngquant
