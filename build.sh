@@ -52,6 +52,8 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	# install 'pngquant' build dependencies (required by node module)
 	apt-get build-dep --quiet \
 		pngquant
+	# make sure npm is on the latest build
+	npm install -g npm@latest
 	# install go from golang.org
 	wget https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz
 	tar -xvf go${GO_VERSION}.linux-amd64.tar.gz
