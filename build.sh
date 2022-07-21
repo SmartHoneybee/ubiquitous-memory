@@ -10,7 +10,7 @@ MATTERMOST_RELEASE="${MATTERMOST_RELEASE:-v5.26.0}"
 MMCTL_RELEASE="${MMCTL_RELEASE:-v5.26.0}"
 # node key id and release
 NODE_KEY="${NODE_KEY:-9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280}"
-NODE_RELEASE="${NODE_RELEASE:-15}"
+NODE_RELEASE="${NODE_RELEASE:-16}"
 # golang version
 GO_VERSION="${GO_VERSION:-1.18.1}"
 
@@ -52,8 +52,6 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	# install 'pngquant' build dependencies (required by node module)
 	apt-get build-dep --quiet \
 		pngquant
-	# make sure npm is on the latest build
-	npm install -g npm@latest
 	# install go from golang.org
 	wget https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz
 	tar -xvf go${GO_VERSION}.linux-amd64.tar.gz
