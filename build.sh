@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -eux
 # build user
 BUILD_USER_HOME="${BUILD_USER_HOME:-/build}"
@@ -72,7 +72,6 @@ cd "${HOME}"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-nvm install
 
 # download and extract Mattermost sources
 for COMPONENT in server webapp; do
@@ -82,6 +81,12 @@ for COMPONENT in server webapp; do
 	tar --directory="${HOME}/go/src/github.com/mattermost/mattermost-${COMPONENT}" \
 		--strip-components=1 --extract --file="mattermost-${COMPONENT}.tar.gz"
 done
+
+# install mattermost-webapp's required version of nodejs
+pushd "${HOME}/go/src/github.com/mattermost/mattermost-webapp"
+nvm install
+popd
+
 # prepare the go build environment
 install --directory "${HOME}/go/bin"
 if [ "$(go env GOOS)_$(go env GOARCH)" != 'linux_amd64' ]; then
