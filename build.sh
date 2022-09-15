@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -eux
 # build user
 BUILD_USER_HOME="${BUILD_USER_HOME:-/build}"
@@ -8,9 +8,6 @@ DEBIAN_RELEASE="${DEBIAN_RELEASE:-stretch}"
 # Mattermost version to build
 MATTERMOST_RELEASE="${MATTERMOST_RELEASE:-v5.26.0}"
 MMCTL_RELEASE="${MMCTL_RELEASE:-v5.26.0}"
-# node key id and release
-NODE_KEY="${NODE_KEY:-9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280}"
-NODE_RELEASE="${NODE_RELEASE:-16}"
 # golang version
 GO_VERSION="${GO_VERSION:-1.18.1}"
 
@@ -35,20 +32,16 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	# dependencies to setup repositories
 	apt-get install --quiet \
 		gnupg2 dirmngr apt-transport-https ca-certificates curl
-	# receive missing key
-	curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 	# add required additional repositories
 	printf 'deb-src http://deb.debian.org/debian %s main' "${DEBIAN_RELEASE}" \
 		> "/etc/apt/sources.list.d/${DEBIAN_RELEASE}-source.list"
 	printf 'deb http://deb.debian.org/debian %s-backports main' "${DEBIAN_RELEASE}" \
 		> "/etc/apt/sources.list.d/${DEBIAN_RELEASE}-backports.list"
-	printf 'deb https://deb.nodesource.com/node_%s.x %s main' "${NODE_RELEASE}" "${DEBIAN_RELEASE}" \
-		> '/etc/apt/sources.list.d/nodesource.list'
 	# update repositories
 	apt-get update
 	# install dependencies
 	apt-get install --quiet \
-		wget build-essential patch git nodejs python2
+		wget build-essential patch git python2
 	# install 'pngquant' build dependencies (required by node module)
 	apt-get build-dep --quiet \
 		pngquant
@@ -74,6 +67,12 @@ fi
 export GOROOT=/usr/local/go
 export PATH=$GOROOT/bin:$PATH
 cd "${HOME}"
+
+# install NVM
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
 # download and extract Mattermost sources
 for COMPONENT in server webapp; do
 	install --directory "${HOME}/go/src/github.com/mattermost/mattermost-${COMPONENT}"
@@ -82,6 +81,12 @@ for COMPONENT in server webapp; do
 	tar --directory="${HOME}/go/src/github.com/mattermost/mattermost-${COMPONENT}" \
 		--strip-components=1 --extract --file="mattermost-${COMPONENT}.tar.gz"
 done
+
+# install mattermost-webapp's required version of nodejs
+pushd "${HOME}/go/src/github.com/mattermost/mattermost-webapp"
+nvm install
+popd
+
 # prepare the go build environment
 install --directory "${HOME}/go/bin"
 if [ "$(go env GOOS)_$(go env GOARCH)" != 'linux_amd64' ]; then
