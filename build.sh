@@ -45,11 +45,6 @@ if [ "$(id -u)" -eq 0 ]; then # as root user
 	# install 'pngquant' build dependencies (required by node module)
 	apt-get build-dep --quiet \
 		pngquant
-	# install NVM
-	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-	export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-	nvm install
 	# install go from golang.org
 	wget https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz
 	tar -xvf go${GO_VERSION}.linux-amd64.tar.gz
@@ -72,6 +67,13 @@ fi
 export GOROOT=/usr/local/go
 export PATH=$GOROOT/bin:$PATH
 cd "${HOME}"
+
+# install NVM
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+nvm install
+
 # download and extract Mattermost sources
 for COMPONENT in server webapp; do
 	install --directory "${HOME}/go/src/github.com/mattermost/mattermost-${COMPONENT}"
