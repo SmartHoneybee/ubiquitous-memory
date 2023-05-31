@@ -6,10 +6,10 @@ BUILD_USER_NAME="${BUILD_USER_NAME:-build}"
 # Debian release used during build
 DEBIAN_RELEASE="${DEBIAN_RELEASE:-stretch}"
 # Mattermost version to build
-MATTERMOST_RELEASE="${MATTERMOST_RELEASE:-v7.10.2}"
-MMCTL_RELEASE="${MMCTL_RELEASE:-v7.10.2}"
+MATTERMOST_RELEASE="${MATTERMOST_RELEASE:-v7.10.0}"
+MMCTL_RELEASE="${MMCTL_RELEASE:-v7.10.0}"
 # golang version
-GO_VERSION="${GO_VERSION:-1.19.5}"
+GO_VERSION="${GO_VERSION:-1.19}"
 
 if [ "$(id -u)" -eq 0 ]; then # as root user
 	# create build user, if needed
