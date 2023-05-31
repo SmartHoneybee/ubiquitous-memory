@@ -17,38 +17,38 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: dragonfly
-            arch: amd64
-          - os: freebsd
-            arch: amd64
-          - os: freebsd
-            arch: arm
+          #- os: dragonfly
+          #  arch: amd64
+          #- os: freebsd
+          #  arch: amd64
+          #- os: freebsd
+          #  arch: arm
           - os: linux
             arch: arm
           - os: linux
             arch: arm64
-          - os: linux
-            arch: mips
-          - os: linux
-            arch: mips64
-          - os: linux
-            arch: mips64le
-          - os: linux
-            arch: mipsle
-          - os: linux
-            arch: ppc64
-          - os: linux
-            arch: ppc64le
-          - os: linux
-            arch: s390x
-          - os: netbsd
-            arch: amd64
-          - os: netbsd
-            arch: arm
-          - os: openbsd
-            arch: amd64
-          - os: openbsd
-            arch: arm
+          #- os: linux
+          #  arch: mips
+          #- os: linux
+          #  arch: mips64
+          #- os: linux
+          #  arch: mips64le
+          #- os: linux
+          #  arch: mipsle
+          #- os: linux
+          #  arch: ppc64
+          #- os: linux
+          #  arch: ppc64le
+          #- os: linux
+          #  arch: s390x
+          #- os: netbsd
+          #  arch: amd64
+          #- os: netbsd
+          #  arch: arm
+          #- os: openbsd
+          #  arch: amd64
+          #- os: openbsd
+          #  arch: arm
 
     steps:
       - name: Clone repository
