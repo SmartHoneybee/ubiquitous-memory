@@ -9,7 +9,7 @@ env:
   DEBIAN_RELEASE: buster
   DOCKER_PWD: /root
   DOCKER_IMAGE: debian:${DEBIAN_RELEASE}
-  GO_VERSION: 1.18.1
+  GO_VERSION: 1.19
 
 jobs:
   build:
@@ -17,38 +17,38 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: dragonfly
-            arch: amd64
-          - os: freebsd
-            arch: amd64
-          - os: freebsd
-            arch: arm
+          #- os: dragonfly
+          #  arch: amd64
+          #- os: freebsd
+          #  arch: amd64
+          #- os: freebsd
+          #  arch: arm
           - os: linux
             arch: arm
           - os: linux
             arch: arm64
-          - os: linux
-            arch: mips
-          - os: linux
-            arch: mips64
-          - os: linux
-            arch: mips64le
-          - os: linux
-            arch: mipsle
-          - os: linux
-            arch: ppc64
-          - os: linux
-            arch: ppc64le
-          - os: linux
-            arch: s390x
-          - os: netbsd
-            arch: amd64
-          - os: netbsd
-            arch: arm
-          - os: openbsd
-            arch: amd64
-          - os: openbsd
-            arch: arm
+          #- os: linux
+          #  arch: mips
+          #- os: linux
+          #  arch: mips64
+          #- os: linux
+          #  arch: mips64le
+          #- os: linux
+          #  arch: mipsle
+          #- os: linux
+          #  arch: ppc64
+          #- os: linux
+          #  arch: ppc64le
+          #- os: linux
+          #  arch: s390x
+          #- os: netbsd
+          #  arch: amd64
+          #- os: netbsd
+          #  arch: arm
+          #- os: openbsd
+          #  arch: amd64
+          #- os: openbsd
+          #  arch: arm
 
     steps:
       - name: Clone repository
@@ -57,7 +57,7 @@ jobs:
       - name: Set environment from runtime properties
         run: |
           echo "MATTERMOST_RELEASE=$(grep 'mattermost-server' dependabot/go.mod | cut -d' ' -f2)" >> $GITHUB_ENV
-          echo "MMCTL_RELEASE=v7.5.2" >> $GITHUB_ENV
+          echo "MMCTL_RELEASE=v7.10.0" >> $GITHUB_ENV
 
       - name: Pull docker image
         run: 'docker pull "${{ env.DOCKER_IMAGE }}"'
