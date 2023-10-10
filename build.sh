@@ -74,13 +74,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
 # download and extract Mattermost sources
-for COMPONENT in server; do
-	install --directory "${HOME}/go/src/github.com/mattermost/mattermost-${COMPONENT}"
-	wget --quiet --continue --output-document="mattermost-${COMPONENT}.tar.gz" \
-		"https://github.com/mattermost/mattermost-${COMPONENT}/archive/${MATTERMOST_RELEASE}.tar.gz"
-	tar --directory="${HOME}/go/src/github.com/mattermost/mattermost-${COMPONENT}" \
-		--strip-components=1 --extract --file="mattermost-${COMPONENT}.tar.gz"
-done
+install --directory "${HOME}/go/src/github.com/mattermost/mattermost-server"
+wget --quiet --continue --output-document="mattermost-server.tar.gz" \
+	"https://github.com/mattermost/mattermost-server/archive/${MATTERMOST_RELEASE}.tar.gz"
+tar --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
+	--strip-components=1 --extract --file="mattermost-server.tar.gz"
 
 # prepare the go build environment
 install --directory "${HOME}/go/bin"
