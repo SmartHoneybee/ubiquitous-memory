@@ -74,24 +74,13 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
 # download and extract Mattermost sources
-for COMPONENT in server webapp; do
+for COMPONENT in server; do
 	install --directory "${HOME}/go/src/github.com/mattermost/mattermost-${COMPONENT}"
 	wget --quiet --continue --output-document="mattermost-${COMPONENT}.tar.gz" \
 		"https://github.com/mattermost/mattermost-${COMPONENT}/archive/${MATTERMOST_RELEASE}.tar.gz"
 	tar --directory="${HOME}/go/src/github.com/mattermost/mattermost-${COMPONENT}" \
 		--strip-components=1 --extract --file="mattermost-${COMPONENT}.tar.gz"
 done
-# download and extract focalboard
-install --directory "${HOME}/go/src/github.com/mattermost/focalboard"
-	wget --quiet --continue --output-document="focalboard.tar.gz" \
-		"https://github.com/mattermost/focalboard/archive/${MATTERMOST_RELEASE}.tar.gz"
-	tar --directory="${HOME}/go/src/github.com/mattermost/focalboard" \
-		--strip-components=1 --extract --file="focalboard.tar.gz"
-
-# install mattermost-webapp's required version of nodejs
-pushd "${HOME}/go/src/github.com/mattermost/mattermost-webapp"
-nvm install
-popd
 
 # prepare the go build environment
 install --directory "${HOME}/go/bin"
@@ -114,17 +103,6 @@ make --directory="${HOME}/go/src/github.com/mattermost/mmctl" \
 	BUILD_NUMBER="dev-$(go env GOOS)-$(go env GOARCH)-${MMCTL_RELEASE}" \
 	ADVANCED_VET=0 \
 	GO="GOARCH= GOOS= $(command -v go)"
-# build focalboard
-make --directory="${HOME}/go/src/github.com/mattermost/focalboard" \
-	prebuild
-make --directory="${HOME}/go/src/github.com/mattermost/focalboard" \
-	build
-# build Mattermost webapp
-npm set progress false
-sed -i -e 's#--verbose#--display minimal#' \
-	"${HOME}/go/src/github.com/mattermost/mattermost-webapp/package.json"
-make --directory="${HOME}/go/src/github.com/mattermost/mattermost-webapp" \
-	build
 # build Mattermost server
 patch --directory="${HOME}/go/src/github.com/mattermost/mattermost-server" \
 	--strip=1 -t < "${HOME}/build-release.patch"
